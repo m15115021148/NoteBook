@@ -1,0 +1,32 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/red_dan</item>
+        <item name="colorPrimaryDark">@color/red_dan</item>
+        <item name="colorAccent">@color/red_dan</item>
+    </style>
+
+    <!-- 圆形dialog -->
+    <style name="CustomDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <style name="CustomProgressDialog" parent="@style/CustomDialog">
+        <item name="android:windowBackground">@color/transparency</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+    <!-- 窗口样式 -->
+    <style name="FloatingBuy" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@color/transparency</item>　　
+        <item name="android:windowIsTranslucent">true</item>　　　
+    </style>
+
+</resources>

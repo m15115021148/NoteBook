@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparency">#00000000</color>
+    <color name="lan">#0000ff</color>
+
+    <color name="pop_txt_color">#007AFF</color>
+    <color name="pop_txt_bg">#55cdcdcd</color>
+    <color name="red_txt">#D25544</color>
+
+    <color name="title_bg">#019b97</color>
+    <color name="white_dan">#f6f9fb</color>
+    <color name="grey">#acacac</color>
+    <color name="lan_dan">#32a5e3</color>
+    <color name="blue_dan">#23c975</color>
+    <color name="red_dan">#ec6869</color>
+
+
+    <color name="title_bg_dan">#99019b97</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="black">#333333</color>
+    <!-- 黑色 -->
+    <color name="black_shen">#000000</color>
+    <color name="black_dan">#222222</color>
+
+    <color name="txt_hui">#999999</color>
+</resources>

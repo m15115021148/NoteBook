@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:background="@color/red_dan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_350px_in720p"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_100px_in720p"
+            android:layout_height="@dimen/_100px_in720p"
+            android:layout_marginLeft="@dimen/_40px_in720p"
+            android:layout_marginTop="@dimen/_40px_in720p"
+            android:background="@drawable/autor_pressed" />
+
+        <TextView
+            android:layout_marginTop="@dimen/_30px_in720p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_80px_in720p"
+            android:text="cmm"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_32px_in720p" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1px_in720p"
+        android:background="@color/pop_txt_bg" />
+
+    <ListView
+        android:overScrollMode="never"
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:scrollbars="none" />
+
+</LinearLayout>
