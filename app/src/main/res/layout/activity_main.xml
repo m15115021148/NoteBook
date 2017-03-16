@@ -6,12 +6,16 @@
     android:layout_height="match_parent"
     tools:context="com.geek.springdemo.activity.MainActivity">
 
-    <LinearLayout
+    <RelativeLayout
+        android:background="@color/pop_txt_bg"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!--标题-->
         <RelativeLayout
+            android:id="@+id/titleLayout"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90px_in720p"
             android:background="@color/red_dan">
@@ -44,7 +48,29 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
+        <TextView
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="记账"
+            android:textSize="@dimen/_25px_in720p"
+            android:layout_margin="@dimen/_60px_in720p"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/qz_55"
+            android:layout_width="@dimen/_100px_in720p"
+            android:layout_height="@dimen/_100px_in720p" />
+
+        <ListView
+            android:layout_below="@+id/titleLayout"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:divider="@null"
+            android:id="@+id/main_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </RelativeLayout>
 
     <!--左侧布局-->
     <LinearLayout

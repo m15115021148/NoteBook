@@ -26,6 +26,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout mMenuLeft;//左边菜单
     @ViewInject(R.id.listView)
     private ListView mLvLeft;//左侧listView
+    @ViewInject(R.id.main_listView)
+    private ListView mLvMain;//主体listView
     private HttpUtil http;
 
     @Override
@@ -63,6 +65,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mMenuLeft.setOnClickListener(this);
 
         initLeftData();
+    }
+
+    /**
+     * 初始化主体数据
+     */
+    private void initMainData(){
+
     }
 
     /**

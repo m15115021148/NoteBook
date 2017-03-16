@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pop_txt_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_300px_in720p"
+        android:layout_margin="@dimen/_40px_in720p"
+        android:background="@drawable/list_bg"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80px_in720p">
+
+            <TextView
+                android:id="@+id/type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/_20px_in720p"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="收入"
+                android:textColor="@color/blue_dan"
+                android:textSize="@dimen/_32px_in720p" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/type"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/_20px_in720p"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="2017-3-16 19:23"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/_26px_in720p" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_marginRight="@dimen/_20px_in720p"
+            android:layout_marginLeft="@dimen/_20px_in720p"
+            android:background="@color/pop_txt_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1px_in720p"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_marginLeft="@dimen/_20px_in720p"
+                android:layout_centerVertical="true"
+                android:src="@color/grey"
+                android:layout_width="@dimen/_180px_in720p"
+                android:layout_height="@dimen/_150px_in720p" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
