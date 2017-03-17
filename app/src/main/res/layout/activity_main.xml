@@ -7,17 +7,17 @@
     tools:context="com.geek.springdemo.activity.MainActivity">
 
     <RelativeLayout
-        android:background="@color/pop_txt_bg"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/pop_txt_bg"
+        android:orientation="vertical">
         <!--标题-->
         <RelativeLayout
             android:id="@+id/titleLayout"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_90px_in720p"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:background="@color/red_dan">
 
             <LinearLayout
@@ -46,29 +46,35 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_35px_in720p" />
 
+            <LinearLayout
+                android:id="@+id/account"
+                android:layout_width="@dimen/_100px_in720p"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical|right">
+
+                <TextView
+                    android:textSize="@dimen/_30px_in720p"
+                    android:textColor="@drawable/include_title_color"
+                    android:text="记账"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/_20px_in720p"
+                     />
+
+            </LinearLayout>
+
         </RelativeLayout>
 
-        <TextView
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:text="记账"
-            android:textSize="@dimen/_25px_in720p"
-            android:layout_margin="@dimen/_60px_in720p"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/qz_55"
-            android:layout_width="@dimen/_100px_in720p"
-            android:layout_height="@dimen/_100px_in720p" />
-
         <ListView
-            android:layout_below="@+id/titleLayout"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:divider="@null"
             android:id="@+id/main_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            android:layout_below="@+id/titleLayout"
+            android:divider="@null"
+            android:listSelector="#00000000"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
 
     </RelativeLayout>
 
@@ -84,7 +90,7 @@
         <include
             layout="@layout/include_main_left_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
