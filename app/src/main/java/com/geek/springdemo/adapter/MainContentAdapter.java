@@ -73,7 +73,7 @@ public class MainContentAdapter extends BaseAdapter{
         }
         AccountsModel model = mList.get(position);
 
-        if (model.getType().equals("1")){
+        if (model.getType().equals("0")){
             holder.type.setText("收入");
             holder.type.setTextColor(Color.parseColor("#23c975"));
             holder.look.setBackground(mContext.getResources().getDrawable(R.drawable.qz_27));

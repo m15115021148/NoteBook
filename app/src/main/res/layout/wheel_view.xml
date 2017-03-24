@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_600px_in720p"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.geek.springdemo.view.WheelView
+        android:id="@+id/wheel_view_wv"
+        android:layout_width="@dimen/_600px_in720p"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

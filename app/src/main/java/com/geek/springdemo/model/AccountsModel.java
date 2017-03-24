@@ -5,7 +5,7 @@ package com.geek.springdemo.model;
  */
 
 public class AccountsModel {
-    private String type;//1 收入  2支出
+    private String type;//0 收入  1支出
     private String time;
     private String image;
     private String money;

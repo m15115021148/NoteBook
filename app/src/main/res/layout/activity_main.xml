@@ -4,6 +4,7 @@
     android:id="@+id/mDrawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pop_txt_bg"
     tools:context="com.geek.springdemo.activity.MainActivity">
 
     <RelativeLayout

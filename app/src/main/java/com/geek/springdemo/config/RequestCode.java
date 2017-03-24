@@ -18,7 +18,9 @@ public class RequestCode {
     public static final String REGISTERTOOT = "密码长度应在6-16位，必须是字母跟数字组合";
 
     //	int类型常量
-    public static final int REGISTER = 0x0001;//注册常量
-    public static final int LOGIN = 0x0002;//登录常量
-
+    public static final int REGISTER = 0x001;//注册常量
+    public static final int LOGIN = 0x002;//登录常量
+    public static final int UPLOADACCOUNT = 0x003;//S上传账单信息
+    public static final int GETKINDS = 0x004;//得到类型列表
+    public static final int GETACCOUNTLIST = 0x004;//获取账单信息
 }

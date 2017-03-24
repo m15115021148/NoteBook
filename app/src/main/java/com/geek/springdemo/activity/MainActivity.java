@@ -14,8 +14,14 @@ import android.widget.ListView;
 import com.geek.springdemo.R;
 import com.geek.springdemo.adapter.MainContentAdapter;
 import com.geek.springdemo.adapter.MainLeftAdapter;
+import com.geek.springdemo.application.MyApplication;
+import com.geek.springdemo.config.RequestCode;
+import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.util.ParserUtil;
+import com.geek.springdemo.util.ToastUtil;
+import com.geek.springdemo.view.RoundProgressDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -37,6 +43,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @ViewInject(R.id.account)
     private LinearLayout mAccount;//记账
     private HttpUtil http;
+    private RoundProgressDialog progressDialog;
     private List<AccountsModel> mList = new ArrayList<>();//数据
 
 
@@ -47,16 +54,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         initData();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAccountListData(MyApplication.userModel.getUserID(),"0","","","","");
+    }
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            if (progressDialog != null && progressDialog.isShowing()) {
+                progressDialog.dismiss();// 关闭进度条
+            }
             switch (msg.what){
                 case HttpUtil.SUCCESS:
+                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
+                        mList.clear();
+                        mList = ParserUtil.jsonToList(msg.obj.toString(),AccountsModel.class);
+                        initMainData(mList);
+                    }
                     break;
                 case HttpUtil.EMPTY:
+                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
+                        mList.clear();
+                        MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
+                    }
                     break;
                 case HttpUtil.FAILURE:
+                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
                     break;
                 case HttpUtil.LOADING:
                     break;
@@ -75,19 +101,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         mMenuLeft.setOnClickListener(this);
         mAccount.setOnClickListener(this);
 
-        for (int i=0;i<8;i++){
-            AccountsModel model = new AccountsModel();
-            model.setType(String.valueOf(i%2));
-            model.setTime("2017-3-17 10:22");
-            model.setImage("");
-            model.setMoney((5+i*2)+"");
-            model.setKind("类型"+i);
-            model.setNote("的健康减肥的风景"+i);
-            mList.add(model);
+        if (http == null){
+            http = new HttpUtil(handler);
         }
-
         initLeftData();
-        initMainData(mList);
+    }
+
+    /**
+     * 得到账单列表
+     */
+    private void getAccountListData(String userID,String type,String kindID,String startTime,String endTime,String page){
+        if (MyApplication.getNetObject().isNetConnected()) {
+            progressDialog = RoundProgressDialog.createDialog(mContext);
+            if (progressDialog != null && !progressDialog.isShowing()) {
+                progressDialog.setMessage("加载中...");
+                progressDialog.show();
+            }
+            http.sendGet(RequestCode.GETACCOUNTLIST, WebUrlConfig.getAccountsList(userID, type, kindID, startTime, endTime, page));
+        } else {
+            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
+        }
     }
 
     /**

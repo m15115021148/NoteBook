@@ -4,13 +4,160 @@
     android:id="@+id/activity_account"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:overScrollMode="never"
+    android:background="@color/white"
     android:orientation="vertical"
+    android:overScrollMode="never"
     tools:context="com.geek.springdemo.activity.AccountActivity">
 
     <include
         layout="@layout/include_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_40px_in720p"
+        android:text="类别"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_35px_in720p" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/income"
+            android:layout_width="@dimen/_180px_in720p"
+            android:layout_height="wrap_content"
+            android:background="@drawable/income_text_bg"
+            android:gravity="center"
+            android:padding="@dimen/_10px_in720p"
+            android:text="收入"
+            android:textColor="@drawable/income_color_bg"
+            android:textSize="@dimen/_32px_in720p" />
+
+        <TextView
+            android:id="@+id/expend"
+            android:layout_width="@dimen/_180px_in720p"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_40px_in720p"
+            android:background="@drawable/expend_text_bg"
+            android:gravity="center"
+            android:padding="@dimen/_10px_in720p"
+            android:text="支出"
+            android:textColor="@drawable/income_color_bg"
+            android:textSize="@dimen/_32px_in720p" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@color/pop_txt_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:text="金额"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_35px_in720p" />
+
+
+    <EditText
+        android:id="@+id/money"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_70px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@drawable/money_bg"
+        android:ellipsize="end"
+        android:inputType="numberDecimal"
+        android:maxLength="10"
+        android:maxLines="1"
+        android:padding="@dimen/_10px_in720p"
+        android:textColor="@color/blue_dan"
+        android:textSize="@dimen/_32px_in720p" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_50px_in720p"
+        android:background="@color/pop_txt_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:text="类型"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_35px_in720p" />
+
+    <TextView
+        android:id="@+id/kind"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_70px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@drawable/kind_bg"
+        android:ellipsize="end"
+        android:gravity="left|center_vertical"
+        android:maxLines="1"
+        android:padding="@dimen/_10px_in720p"
+        android:text="红包"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_28px_in720p" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_50px_in720p"
+        android:background="@color/pop_txt_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:text="描述"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_35px_in720p" />
+
+    <EditText
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_180px_in720p"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@drawable/income_text_normal"
+        android:ellipsize="end"
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:maxLines="6"
+        android:gravity="top"
+        android:padding="@dimen/_10px_in720p"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/_28px_in720p" />
 
 </LinearLayout>
