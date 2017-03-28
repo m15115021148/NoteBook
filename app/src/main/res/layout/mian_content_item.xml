@@ -114,15 +114,13 @@
                 <TextView
                     android:visibility="gone"
                     android:id="@+id/des"
-                    android:layout_width="@dimen/_90px_in720p"
-                    android:layout_height="@dimen/_90px_in720p"
+                    android:layout_width="@dimen/_40px_in720p"
+                    android:layout_height="@dimen/_40px_in720p"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginRight="@dimen/_20px_in720p"
                     android:gravity="center"
-                    android:src="@drawable/qz_55"
-                    android:text="详情"
-                    android:textColor="@color/white"
+                    android:background="@drawable/up_loading"
                     android:textSize="@dimen/_25px_in720p" />
 
             </RelativeLayout>

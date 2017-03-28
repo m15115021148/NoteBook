@@ -21,10 +21,10 @@ import java.util.List;
 public class MainLeftAdapter extends BaseAdapter{
     private Context mContext;
     private String[] values = {
-            "历史查询","统计分析","设置"
+            "历史查询","统计分析","预记账","设置"
     };
     private int[] keys = {
-            R.drawable.qz_39,R.drawable.qz_50,R.drawable.qz_59
+            R.drawable.qz_39,R.drawable.qz_50,R.drawable.qz_44,R.drawable.qz_59
     };
     private Holder holder;
 

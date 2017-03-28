@@ -7,21 +7,25 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
 import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpUtil;
+import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.util.DateUtil;
 import com.geek.springdemo.util.ParserUtil;
+import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
 import com.geek.springdemo.view.RoundProgressDialog;
 import com.geek.springdemo.view.WheelView;
@@ -61,6 +65,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     private List<KindModel> mKindList = new ArrayList<>();
     private List<String> mValues = new ArrayList<>();//类型数据
     private String kind = "";//类型
+    private int inputType = 0;//上级页面类型
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +92,14 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
                         }
                         mKind.setText(mValues.get(kindSelect));
                         kind = mValues.get(kindSelect);
+                        //保存类型 信息
+                        PreferencesUtil.setListData(mContext,"kind",mValues);
                     }
                     if (msg.arg1== RequestCode.UPLOADACCOUNT){
                         ResultModel model = (ResultModel) ParserUtil.jsonToObject(msg.obj.toString(),ResultModel.class);
                         if (model.getResult().equals("1")){
                             ToastUtil.showBottomLong(mContext,"记账成功");
+                            setResult(100);
                             mContext.finish();
                         }else{
                             ToastUtil.showBottomLong(mContext,model.getErrorMsg());
@@ -99,9 +107,19 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
                     }
                     break;
                 case HttpUtil.EMPTY:
+                    if (msg.arg1 == RequestCode.GETKINDS){
+                        mValues = PreferencesUtil.getListData(mContext,"kind");
+                        mKind.setText(mValues.get(kindSelect));
+                        kind = mValues.get(kindSelect);
+                    }
                     break;
                 case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+                    ToastUtil.showBottomLong(mContext, "服务器无法连接，使用本地保存");
+                    if (msg.arg1 == RequestCode.GETKINDS){
+                        mValues = PreferencesUtil.getListData(mContext,"kind");
+                        mKind.setText(mValues.get(kindSelect));
+                        kind = mValues.get(kindSelect);
+                    }
                     break;
                 case HttpUtil.LOADING:
                     break;
@@ -126,6 +144,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         mSure.setVisibility(View.VISIBLE);
         content.setText("保存");
         mKind.setText("请选择");
+        inputType = getIntent().getIntExtra("inputType",0);
         if (http == null){
             http = new HttpUtil(handler);
         }
@@ -214,7 +233,19 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
                 return;
             }
             String time = DateUtil.getCurrentDate();//当前时间
-            upLoadAccount(MyApplication.userModel.getUserID(),String.valueOf(type),kind,mMoney.getText().toString(),mNote.getText().toString(),time);
+            if (inputType==1){//预记账
+                AccountsModel model = new AccountsModel();
+                model.setType(String.valueOf(type));
+                model.setKind(kind);
+                model.setMoney(mMoney.getText().toString());
+                model.setNote(mNote.getText().toString());
+                model.setTime(time);
+                MyApplication.db.insert(model);
+                setResult(101);
+                mContext.finish();
+            }else{
+                upLoadAccount(MyApplication.userModel.getUserID(),String.valueOf(type),kind,mMoney.getText().toString(),mNote.getText().toString(),time);
+            }
         }
     }
 

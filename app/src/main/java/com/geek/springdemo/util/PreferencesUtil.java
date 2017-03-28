@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
+import java.util.Arrays;
+import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -208,5 +210,37 @@ public class PreferencesUtil {
 				Context.MODE_PRIVATE);
 		return sp.getString(key,"");
 	}
+
+	/**
+	 * 保存一个数组类型
+	 * @param context
+	 * @param key
+	 */
+	public static void setListData(Context context, String key,List<String> values){
+		SharedPreferences sp = context.getSharedPreferences(SP_LOGIN_PRIVATE,
+				Context.MODE_PRIVATE);
+		String txt = "";
+		if (values!=null&&values.size()>0){
+			for (String str : values){
+				txt = txt + str + ";";
+			}
+		}
+		sp.edit().putString(key,txt).apply();
+	}
+
+	/**
+	 * 得到保存的数组
+	 * @param context
+	 * @param key
+	 * @return
+	 */
+	public static List<String> getListData(Context context, String key){
+		SharedPreferences sp = context.getSharedPreferences(SP_LOGIN_PRIVATE,
+				Context.MODE_PRIVATE);
+		String str = sp.getString(key,"");
+		String[] split = str.split(";");
+		return Arrays.asList(split);
+	}
+
 
 }

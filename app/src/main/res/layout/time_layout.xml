@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/layout_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100px_in720p"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_20px_in720p"
+            android:text="请选择日期与时间"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_35px_in720p" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2px_in720p"
+        android:layout_marginBottom="@dimen/_20px_in720p"
+        android:background="@color/lan_dan" />
+
+    <LinearLayout
+        android:id="@+id/timePicker1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:padding="@dimen/_20px_in720p">
+
+        <com.geek.springdemo.view.WheelTimeView
+            android:id="@+id/year"
+            android:layout_width="@dimen/_150px_in720p"
+            android:layout_height="wrap_content" />
+
+        <com.geek.springdemo.view.WheelTimeView
+            android:id="@+id/month"
+            android:layout_width="@dimen/_120px_in720p"
+            android:layout_height="wrap_content" />
+
+        <com.geek.springdemo.view.WheelTimeView
+            android:id="@+id/day"
+            android:layout_width="@dimen/_120px_in720p"
+            android:layout_height="wrap_content" />
+
+        <com.geek.springdemo.view.WheelTimeView
+            android:id="@+id/hour"
+            android:layout_width="@dimen/_120px_in720p"
+            android:layout_height="wrap_content" />
+
+        <com.geek.springdemo.view.WheelTimeView
+            android:id="@+id/mins"
+            android:layout_width="@dimen/_120px_in720p"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_2px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@color/grey" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100px_in720p"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/btn_datetime_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="取消"
+            android:textSize="@dimen/_35px_in720p" />
+
+        <View
+            android:layout_width="@dimen/_2px_in720p"
+            android:layout_height="match_parent"
+            android:background="@color/grey" />
+
+        <TextView
+            android:id="@+id/btn_datetime_sure"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="确定"
+            android:textSize="@dimen/_35px_in720p" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

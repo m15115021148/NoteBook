@@ -19,6 +19,7 @@
             android:background="@drawable/autor_pressed" />
 
         <TextView
+            android:id="@+id/userName"
             android:layout_marginTop="@dimen/_30px_in720p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

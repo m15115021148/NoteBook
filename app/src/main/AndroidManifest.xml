@@ -9,15 +9,13 @@
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
-
-        </activity>
+        <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.AccountActivity" />
-        <activity android:name=".activity.SplashActivity" >
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +23,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.RegisterActivity"></activity>
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.HistoryCheckActivity" />
+        <activity android:name=".activity.HistoryDetailActivity" />
+        <activity android:name=".activity.ReadyAccountActivity"></activity>
     </application>
 
 </manifest>

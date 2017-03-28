@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/fastjson-1.1.50.android.jar')
     compile files('libs/xutils_3.3.34.jar')
+    compile files('libs/ArcScroll.jar')
 }

@@ -36,14 +36,14 @@ public class WebUrlConfig {
      * 得到保存的记账信息
      * @param userID       用户id
      * @param type  类别 0 收入   1 支出  全部""
-     * @param kindID  类型  全部""
+     * @param kind  类型  全部""
      * @param startTime 开始时间 全部""
      * @param endTime 结束时间  全部""
      * @param page 页面 默认0
      * @return
      */
-    public static String getAccountsList(String userID,String type,String kindID,String startTime,String endTime,String page){
-        return GETACCOUNTSLIST + "userID="+userID+"&type="+type+"&kindID="+kindID+"&startTime="+startTime+"&endTime="+endTime+"&page="+page;
+    public static String getAccountsList(String userID,String type,String kind,String startTime,String endTime,String page){
+        return GETACCOUNTSLIST + "userID="+userID+"&type="+type+"&kind="+kind+"&startTime="+startTime+"&endTime="+endTime+"&page="+page;
     }
 
     /**

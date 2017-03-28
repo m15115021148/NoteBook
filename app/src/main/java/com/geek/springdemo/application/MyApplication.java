@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.geek.springdemo.db.DBAccount;
 import com.geek.springdemo.model.UserModel;
 import com.geek.springdemo.util.NetworkUtil;
 
@@ -28,12 +29,17 @@ public class MyApplication extends Application{
     private static MyApplication instance;
     public static NetworkUtil netState;//网络状态
     public static UserModel userModel;//用户实体类
+    public static DBAccount db;//数据库管理
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         initXutils();
         netState = new NetworkUtil(getApplicationContext());
+        if (db == null){
+            db = new DBAccount(getApplicationContext());
+        }
     }
 
     /**

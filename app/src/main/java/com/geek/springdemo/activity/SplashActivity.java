@@ -59,6 +59,12 @@ public class SplashActivity extends BaseActivity implements Runnable {
                 case HttpUtil.EMPTY:
                     break;
                 case HttpUtil.FAILURE:
+                    ToastUtil.showBottomLong(mContext, "服务器无法连接，进入本地保存");
+                    //预记账 页面
+                    MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
+                    Intent read = new Intent(mContext,ReadyAccountActivity.class);
+                    startActivity(read);
+                    mContext.finish();
                     break;
                 case HttpUtil.LOADING:
                     break;
@@ -97,9 +103,9 @@ public class SplashActivity extends BaseActivity implements Runnable {
             params.addBodyParameter("name",name);
             params.addBodyParameter("password",MyApplication.md5(psw));
             http.sendPost(RequestCode.LOGIN, params);
-        } else {//自动登录 没有网络 不更新保存的loginModel
+        } else {//自动登录 没有网络 预记账页面
             MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
-            Intent intent = new Intent(mContext,MainActivity.class);
+            Intent intent = new Intent(mContext,ReadyAccountActivity.class);
             startActivity(intent);
             mContext.finish();
         }

@@ -76,12 +76,11 @@ public class MainContentAdapter extends BaseAdapter{
         if (model.getType().equals("0")){
             holder.type.setText("收入");
             holder.type.setTextColor(Color.parseColor("#23c975"));
-            holder.look.setBackground(mContext.getResources().getDrawable(R.drawable.qz_27));
         }else{
             holder.type.setText("支出");
             holder.type.setTextColor(Color.parseColor("#D25544"));
-            holder.look.setBackground(mContext.getResources().getDrawable(R.drawable.qz_55));
         }
+
         holder.time.setText(model.getTime());
         HttpImageUtil.loadImage(holder.img,model.getImage());
         holder.money.setText(Html.fromHtml("金额："+"<font color='#D25544'>"+model.getMoney()+"</font>"));
@@ -92,6 +91,12 @@ public class MainContentAdapter extends BaseAdapter{
             holder.isShow.setVisibility(View.VISIBLE);
         }else{
             holder.isShow.setVisibility(View.GONE);
+        }
+
+        if (model.getId().equals("")){
+            holder.look.setVisibility(View.GONE);
+        }else{
+            holder.look.setVisibility(View.VISIBLE);
         }
 
         holder.look.setOnClickListener(new View.OnClickListener() {

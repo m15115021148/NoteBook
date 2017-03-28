@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.geek.springdemo.R;
 import com.geek.springdemo.adapter.MainContentAdapter;
@@ -19,6 +20,7 @@ import com.geek.springdemo.config.RequestCode;
 import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.util.DateUtil;
 import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.ToastUtil;
 import com.geek.springdemo.view.RoundProgressDialog;
@@ -45,19 +47,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private HttpUtil http;
     private RoundProgressDialog progressDialog;
     private List<AccountsModel> mList = new ArrayList<>();//数据
-
+    private String startTime = "";//开始时间
+    private String endTime ="";//结束时间
+    @ViewInject(R.id.userName)
+    private TextView mUserName;//名称
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
         initData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getAccountListData(MyApplication.userModel.getUserID(),"0","","","","");
     }
 
     private Handler handler = new Handler(){
@@ -104,20 +103,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         if (http == null){
             http = new HttpUtil(handler);
         }
+        mUserName.setText(MyApplication.userModel.getName());
         initLeftData();
+        startTime = DateUtil.getCurrentAgeTime(24*3);
+        endTime = DateUtil.getCurrentDate();
+        getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
     }
 
     /**
      * 得到账单列表
      */
-    private void getAccountListData(String userID,String type,String kindID,String startTime,String endTime,String page){
+    private void getAccountListData(String userID,String type,String kind,String startTime,String endTime,String page){
         if (MyApplication.getNetObject().isNetConnected()) {
             progressDialog = RoundProgressDialog.createDialog(mContext);
             if (progressDialog != null && !progressDialog.isShowing()) {
                 progressDialog.setMessage("加载中...");
                 progressDialog.show();
             }
-            http.sendGet(RequestCode.GETACCOUNTLIST, WebUrlConfig.getAccountsList(userID, type, kindID, startTime, endTime, page));
+            http.sendGet(RequestCode.GETACCOUNTLIST, WebUrlConfig.getAccountsList(userID, type, kind, startTime, endTime, page));
         } else {
             ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
         }
@@ -142,11 +145,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mDrawerLayout.closeDrawers();
                 switch (position){
-                    case 0:
+                    case 0://历史数据查询
+                        Intent intent = new Intent(mContext,HistoryCheckActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
                         break;
-                    case 2:
+                    case 2://预记账
+                        Intent ready = new Intent(mContext,ReadyAccountActivity.class);
+                        startActivity(ready);
+                        break;
+                    case 3:
                         break;
                     default:
                         break;
@@ -162,12 +171,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         }
         if (v == mAccount){
             Intent intent = new Intent(mContext,AccountActivity.class);
-            startActivity(intent);
+            intent.putExtra("inputType",2);// 直接记账
+            startActivityForResult(intent,100);
         }
     }
 
     @Override
     public void onLooKDes(int pos) {
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100){
+            startTime = DateUtil.getCurrentAgeTime(24*3);
+            endTime = DateUtil.getCurrentDate();
+            getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
+        }
     }
 }

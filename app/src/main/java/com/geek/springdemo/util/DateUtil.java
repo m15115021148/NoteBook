@@ -723,7 +723,7 @@ public class DateUtil {
 		Calendar calendar = Calendar.getInstance();
 		/* HOUR_OF_DAY 指示一天中的小时 */
 		calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - hour);
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return df.format(calendar.getTime());
 	}
 
