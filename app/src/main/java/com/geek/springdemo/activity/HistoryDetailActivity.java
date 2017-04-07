@@ -54,7 +54,6 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
                     }
                     break;
                 case HttpUtil.EMPTY:
-
                     break;
                 case HttpUtil.FAILURE:
                     ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);

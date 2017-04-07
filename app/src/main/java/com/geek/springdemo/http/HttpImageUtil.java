@@ -50,9 +50,9 @@ public class HttpImageUtil {
                 //设置图片的质量
                 .setConfig(Bitmap.Config.RGB_565)
                 //设置加载过程中的图片
-//                .setLoadingDrawableId(R.drawable.jzsb_03)
+                .setLoadingDrawableId(R.drawable.meng_04)
                 //设置加载失败后的图片
-//                .setFailureDrawableId(R.drawable.jzsb_03)
+                .setFailureDrawableId(R.drawable.meng_05)
                 //设置使用缓存
                 .setUseMemCache(true)
                 //设置显示圆形图片.

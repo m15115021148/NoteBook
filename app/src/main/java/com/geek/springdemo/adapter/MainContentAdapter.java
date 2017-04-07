@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,7 +83,7 @@ public class MainContentAdapter extends BaseAdapter{
         }
 
         holder.time.setText(model.getTime());
-        HttpImageUtil.loadImage(holder.img,model.getImage());
+        HttpImageUtil.loadRoundImage(holder.img,model.getImage());
         holder.money.setText(Html.fromHtml("金额："+"<font color='#D25544'>"+model.getMoney()+"</font>"));
         holder.kind.setText("类型："+model.getKind());
         holder.note.setText("描述："+model.getNote());

@@ -7,6 +7,15 @@ package com.geek.springdemo.model;
 public class ResultModel {
     private String result;
     private String errorMsg;
+    private String msg;
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 
     public String getResult() {
         return result;

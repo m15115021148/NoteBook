@@ -12,8 +12,9 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/_100px_in720p"
-            android:layout_height="@dimen/_100px_in720p"
+            android:id="@+id/header"
+            android:layout_width="@dimen/_150px_in720p"
+            android:layout_height="@dimen/_150px_in720p"
             android:layout_marginLeft="@dimen/_40px_in720p"
             android:layout_marginTop="@dimen/_40px_in720p"
             android:background="@drawable/autor_pressed" />

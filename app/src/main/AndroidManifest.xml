@@ -6,6 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
+    <!-- 本地相册/相机权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -26,7 +30,8 @@
         <activity android:name=".activity.RegisterActivity" />
         <activity android:name=".activity.HistoryCheckActivity" />
         <activity android:name=".activity.HistoryDetailActivity" />
-        <activity android:name=".activity.ReadyAccountActivity"></activity>
+        <activity android:name=".activity.ReadyAccountActivity" />
+        <activity android:name=".activity.UserActivity"></activity>
     </application>
 
 </manifest>

@@ -61,12 +61,14 @@
             <ImageView
                 android:id="@+id/img"
                 android:layout_width="@dimen/_180px_in720p"
-                android:layout_height="@dimen/_150px_in720p"
+                android:layout_height="@dimen/_180px_in720p"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/_20px_in720p"
-                android:src="@color/grey" />
+                android:src="@drawable/meng_04" />
 
             <RelativeLayout
+                android:layout_marginTop="@dimen/_15px_in720p"
+                android:layout_marginBottom="@dimen/_15px_in720p"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/img"

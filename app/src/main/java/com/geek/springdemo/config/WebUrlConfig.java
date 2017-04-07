@@ -14,7 +14,7 @@ public class WebUrlConfig {
     private static final String GETACCOUNTSLIST = HOST_NAME + "dbAction_getAccountList.do?";//得到保存的记账信息
     private static final String GETKINDS = HOST_NAME + "dbAction_getKinds.do?";//得到类型列表
     private static final String UPLOADACCOUNT = HOST_NAME + "dbAction_uploadAccount.do?";//上传账单系信息
-
+    private static final String UPLOADHEADER = HOST_NAME + "dbAction_uploadHeader.do?";//上传头像
 
     /**
      * 注册
@@ -66,6 +66,14 @@ public class WebUrlConfig {
      */
     public static String upLoadAccount(String userID,String type,String kind,String money,String note,String time){
         return UPLOADACCOUNT+"userID="+userID+"&type="+type+"&kind="+kind+"&money="+money+"&note="+note+"&time="+time;
+    }
+
+    /**
+     * 上传头像
+     * @return
+     */
+    public static String upLoadHeader(){
+        return UPLOADHEADER;
     }
 
 }

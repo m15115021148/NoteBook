@@ -6,18 +6,23 @@ import android.os.Message;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geek.springdemo.R;
 import com.geek.springdemo.adapter.MainContentAdapter;
 import com.geek.springdemo.adapter.MainLeftAdapter;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
+import com.geek.springdemo.config.WebHostConfig;
 import com.geek.springdemo.config.WebUrlConfig;
+import com.geek.springdemo.http.HttpImageUtil;
 import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.util.DateUtil;
@@ -51,6 +56,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private String endTime ="";//结束时间
     @ViewInject(R.id.userName)
     private TextView mUserName;//名称
+    private long exitTime = 0;//退出的时间
+    @ViewInject(R.id.header)
+    private ImageView mHeader;//头像
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +89,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                     }
                     break;
                 case HttpUtil.FAILURE:
+                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
+                        mList.clear();
+                        MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
+                    }
                     ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
                     break;
                 case HttpUtil.LOADING:
@@ -99,12 +111,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         mDrawerLayout.setFocusableInTouchMode(false);//可以点击返回键
         mMenuLeft.setOnClickListener(this);
         mAccount.setOnClickListener(this);
+        mHeader.setOnClickListener(this);
 
         if (http == null){
             http = new HttpUtil(handler);
         }
         mUserName.setText(MyApplication.userModel.getName());
         initLeftData();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
         startTime = DateUtil.getCurrentAgeTime(24*3);
         endTime = DateUtil.getCurrentDate();
         getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
@@ -172,8 +192,35 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         if (v == mAccount){
             Intent intent = new Intent(mContext,AccountActivity.class);
             intent.putExtra("inputType",2);// 直接记账
-            startActivityForResult(intent,100);
+            startActivity(intent);
         }
+        if (v == mHeader){
+            Intent intent = new Intent(mContext,UserActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     *	退出activity
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                //退出所有的activity
+                Intent intent = new Intent();
+                intent.setAction(BaseActivity.TAG_ESC_ACTIVITY);
+                sendBroadcast(intent);
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -182,10 +229,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100){
-            startTime = DateUtil.getCurrentAgeTime(24*3);
-            endTime = DateUtil.getCurrentDate();
-            getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
-        }
+//        if (requestCode == 100){
+//            startTime = DateUtil.getCurrentAgeTime(24*3);
+//            endTime = DateUtil.getCurrentDate();
+//            getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
+//        }
     }
 }

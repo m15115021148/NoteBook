@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+     >
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="温馨提示"
+        android:textSize="18sp" />
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lan_dan"
+        />
+
+    <EditText
+        android:id="@+id/dialog_et_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入..."
+        android:singleLine="true"
+        android:padding="10dp"
+        android:textColor="#333333"
+        android:textColorHint="#dedede"
+        android:textSize="17sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:visibility="gone" 
+        android:id="@+id/dialog_tv_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:hint="请设置内容"
+        android:textColor="#000000"
+        android:textSize="17sp" />
+
+</LinearLayout>
