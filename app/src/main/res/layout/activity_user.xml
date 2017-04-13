@@ -27,13 +27,30 @@
             android:layout_marginTop="@dimen/_80px_in720p"
             android:background="@drawable/autor_pressed" />
 
-        <TextView
-            android:id="@+id/userName"
+        <LinearLayout
             android:layout_marginTop="@dimen/_40px_in720p"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_32px_in720p" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:background="@drawable/phone"
+                android:layout_width="@dimen/_14px_in720p"
+                android:layout_height="@dimen/_22px_in720p" />
+
+            <TextView
+                android:layout_marginLeft="@dimen/_10px_in720p"
+                android:text="11"
+                android:id="@+id/tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_32px_in720p" />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 

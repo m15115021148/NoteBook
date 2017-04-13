@@ -20,7 +20,6 @@ import com.geek.springdemo.adapter.MainContentAdapter;
 import com.geek.springdemo.adapter.MainLeftAdapter;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebHostConfig;
 import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
 import com.geek.springdemo.http.HttpUtil;
@@ -152,6 +151,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private void initMainData(List<AccountsModel> list){
         MainContentAdapter adapter = new MainContentAdapter(mContext,list,this);
         mLvMain.setAdapter(adapter);
+        mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
     }
 
     /**
@@ -235,4 +240,5 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 //            getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
 //        }
     }
+
 }

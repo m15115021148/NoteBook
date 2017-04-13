@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.geek.springdemo.db.DBAccount;
 import com.geek.springdemo.model.UserModel;
+import com.geek.springdemo.util.LocationService;
 import com.geek.springdemo.util.NetworkUtil;
 
 import org.xutils.BuildConfig;
@@ -30,7 +32,10 @@ public class MyApplication extends Application{
     public static NetworkUtil netState;//网络状态
     public static UserModel userModel;//用户实体类
     public static DBAccount db;//数据库管理
-
+    public LocationService locationService;
+    public static double lat;// 纬度
+    public static double lng;// 经度
+    public static String address;//定位地址
 
     @Override
     public void onCreate() {
@@ -40,6 +45,11 @@ public class MyApplication extends Application{
         if (db == null){
             db = new DBAccount(getApplicationContext());
         }
+        /***
+         * 初始化定位sdk，建议在Application中创建
+         */
+        locationService = new LocationService(getApplicationContext());
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     /**

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebHostConfig;
 import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
 import com.geek.springdemo.http.HttpUtil;
@@ -59,6 +57,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private HttpUtil http;
     private RoundProgressDialog progressDialog;
     private File saveFile;//上传文件夹
+    @ViewInject(R.id.tel)
+    private TextView mTel;//电话
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +113,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mTitle.setText(MyApplication.userModel.getName());
         mHeader.setOnClickListener(this);
         HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
+        mTel.setText(MyApplication.userModel.getTelphone());
         imgUtil = new SystemFunUtil(mContext);
         saveFile = imgUtil.createRootDirectory("upload");
         ImageUtil.deleteFolder(saveFile);

@@ -8,10 +8,37 @@ public class AccountsModel {
     private String id = "";//本地id
     private String type;//0 收入  1支出
     private String time;
-    private String image;
+    private String img = "";
     private String money;
     private String kind;//类型
     private String note;//备注
+    private String lat;
+    private String lng;
+    private String address;
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public String getId() {
         return id;
@@ -37,12 +64,12 @@ public class AccountsModel {
         this.time = time;
     }
 
-    public String getImage() {
-        return image;
+    public String getImg() {
+        return img;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getMoney() {

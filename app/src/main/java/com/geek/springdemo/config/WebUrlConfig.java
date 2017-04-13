@@ -62,10 +62,13 @@ public class WebUrlConfig {
      * @param money
      * @param note
      * @param time
+     * @param lat
+     * @param lng
+     * @param address
      * @return
      */
-    public static String upLoadAccount(String userID,String type,String kind,String money,String note,String time){
-        return UPLOADACCOUNT+"userID="+userID+"&type="+type+"&kind="+kind+"&money="+money+"&note="+note+"&time="+time;
+    public static String upLoadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
+        return UPLOADACCOUNT+"userID="+userID+"&type="+type+"&kind="+kind+"&money="+money+"&note="+note+"&time="+time+"&lat="+lat+"&lng="+lng+"&address="+address;
     }
 
     /**

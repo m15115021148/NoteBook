@@ -117,6 +117,9 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
             model.setMoney(cursor.getString(3));
             model.setKind(cursor.getString(4));
             model.setNote(cursor.getString(5));
+            model.setLat(cursor.getString(6));
+            model.setLng(cursor.getString(7));
+            model.setAddress(cursor.getString(8));
             mList.add(model);
         }
         if (mList.size()>0&&mList!=null){
@@ -129,14 +132,14 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     /**
      * 提交信息
      */
-    private void upLoadAccount(String userID,String type,String kind,String money,String note,String time){
+    private void upLoadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
         if (MyApplication.getNetObject().isNetConnected()) {
             progressDialog = RoundProgressDialog.createDialog(mContext);
             if (progressDialog != null && !progressDialog.isShowing()) {
                 progressDialog.setMessage("加载中...");
                 progressDialog.show();
             }
-            http.sendGet(RequestCode.UPLOADACCOUNT, WebUrlConfig.upLoadAccount(userID, type, kind, money, note, time));
+            http.sendGet(RequestCode.UPLOADACCOUNT, WebUrlConfig.upLoadAccount(userID, type, kind, money, note, time,lat,lng,address));
         } else {
             ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
         }
@@ -175,6 +178,9 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
                 model.setMoney(cursor.getString(3));
                 model.setKind(cursor.getString(4));
                 model.setNote(cursor.getString(5));
+                model.setLat(cursor.getString(6));
+                model.setLng(cursor.getString(7));
+                model.setAddress(cursor.getString(8));
                 mList.add(model);
             }
             initMainData(mList);
@@ -190,6 +196,6 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     public void onLooKDes(int pos) {
         selPos = pos;
         AccountsModel model = mList.get(pos);
-        upLoadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime());
+        upLoadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress());
     }
 }

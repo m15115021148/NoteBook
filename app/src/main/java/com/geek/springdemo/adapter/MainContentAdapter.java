@@ -82,8 +82,13 @@ public class MainContentAdapter extends BaseAdapter{
             holder.type.setTextColor(Color.parseColor("#D25544"));
         }
 
+        String[] img = model.getImg().split(";");
+        if (img!=null&&!img.equals("")&&img.length>0){
+            HttpImageUtil.loadRoundImage(holder.img,img[0]);
+        }else{
+            HttpImageUtil.loadRoundImage(holder.img,"");
+        }
         holder.time.setText(model.getTime());
-        HttpImageUtil.loadRoundImage(holder.img,model.getImage());
         holder.money.setText(Html.fromHtml("金额："+"<font color='#D25544'>"+model.getMoney()+"</font>"));
         holder.kind.setText("类型："+model.getKind());
         holder.note.setText("描述："+model.getNote());

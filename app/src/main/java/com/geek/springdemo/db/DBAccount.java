@@ -40,6 +40,9 @@ public class DBAccount {
 		values.put("kind", model.getKind());
 		values.put("note", model.getNote());
 		values.put("time", model.getTime());
+		values.put("lat",model.getLat());
+		values.put("lng",model.getLng());
+		values.put("address",model.getAddress());
 		db.insert(DBHelper.ACCOUNT, null, values);
 		Log.i("result", "插入成功");
 	}
