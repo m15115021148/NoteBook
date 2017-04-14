@@ -50,8 +50,6 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private TextView mIncome;//收入
     @ViewInject(R.id.expend)
     private TextView mExpend;//支出
-    @ViewInject(R.id.all)
-    private TextView mAll;//全部
     @ViewInject(R.id.kind)
     private TextView mKind;//类型
     private int type = 0;// 类别选中的位置
@@ -124,12 +122,10 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private void initData(){
         mBack.setOnClickListener(this);
         mTitle.setText("查询");
-        mAll.setOnClickListener(this);
         mIncome.setOnClickListener(this);
         mExpend.setOnClickListener(this);
-        mAll.setSelected(true);
-        type=2;
-        mIncome.setSelected(false);
+        mIncome.setSelected(true);
+        type=0;
         mExpend.setSelected(false);
         mKind.setOnClickListener(this);
         mKind.setText("请选择");
@@ -167,23 +163,15 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
         if (v == mBack){
             mContext.finish();
         }
-        if (v == mAll){
-            type = 2;
-            mAll.setSelected(true);
-            mIncome.setSelected(false);
-            mExpend.setSelected(false);
-        }
         if (v == mIncome){
             type = 0;
             mIncome.setSelected(true);
             mExpend.setSelected(false);
-            mAll.setSelected(false);
         }
         if (v == mExpend){
             type = 1;
             mIncome.setSelected(false);
             mExpend.setSelected(true);
-            mAll.setSelected(false);
         }
         if (v == mKind){
             View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);

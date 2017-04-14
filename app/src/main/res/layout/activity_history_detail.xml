@@ -5,11 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.geek.springdemo.activity.HistoryDetailActivity">
 
     <include
         layout="@layout/include_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20px_in720p"
+        android:background="@drawable/history_detail_bg"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_80px_in720p"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextViewDetailStyle"
+                android:maxLines="2"
+                android:text="时间" />
+
+            <TextView
+                style="@style/TextViewDetailStyle"
+                android:text="类型" />
+
+            <TextView
+                style="@style/TextViewDetailStyle"
+                android:text="金额" />
+
+            <TextView
+                style="@style/TextViewDetailStyle"
+                android:text="详情" />
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:listSelector="#00000000"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

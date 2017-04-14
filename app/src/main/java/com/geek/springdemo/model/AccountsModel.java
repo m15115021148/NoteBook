@@ -1,10 +1,12 @@
 package com.geek.springdemo.model;
 
+import java.io.Serializable;
+
 /**
  * Created by cmm on 2017/3/17.
  */
 
-public class AccountsModel {
+public class AccountsModel implements Serializable{
     private String id = "";//本地id
     private String type;//0 收入  1支出
     private String time;

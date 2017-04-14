@@ -25,12 +25,12 @@ public class HttpImageUtil {
         ImageOptions imageOptions = new ImageOptions.Builder()
                 .setSize(-1, -1)//默认适应图片大小
 //                .setRadius(DensityUtil.dip2px(5))
-                .setImageScaleType(ImageView.ScaleType.FIT_XY)
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
                 //设置图片的质量
                 .setConfig(Bitmap.Config.RGB_565)
-//                .setLoadingDrawableId(R.drawable.jzsb_03)
+                .setLoadingDrawableId(R.drawable.meng_10)
                 //设置加载失败后的图片
-//                .setFailureDrawableId(R.drawable.jzsb_03)
+                .setFailureDrawableId(R.drawable.meng_12)
                 //设置使用缓存
                 .setUseMemCache(true)
                 .build();

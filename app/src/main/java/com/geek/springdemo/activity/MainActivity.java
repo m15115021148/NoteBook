@@ -58,6 +58,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private long exitTime = 0;//退出的时间
     @ViewInject(R.id.header)
     private ImageView mHeader;//头像
+    private int currPos = 0;//当前位置
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,13 +149,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     /**
      * 初始化主体数据
      */
-    private void initMainData(List<AccountsModel> list){
+    private void initMainData(final List<AccountsModel> list){
         MainContentAdapter adapter = new MainContentAdapter(mContext,list,this);
         mLvMain.setAdapter(adapter);
+        mLvMain.setSelection(currPos);
         mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                currPos = position;
+                Intent intent = new Intent(mContext,AccountDetailActivity.class);
+                intent.putExtra("AccountsModel",list.get(position));
+                startActivity(intent);
             }
         });
     }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="收入"
+        android:textColor="@color/lan_dan"
+        android:textSize="@dimen/_35px_in720p" />
+
+    <TextView
+        android:id="@+id/money"
+        style="@style/TextViewStyle"
+        android:layout_marginTop="@dimen/_10px_in720p"
+        android:text="金额：33" />
+
+    <TextView
+        android:id="@+id/kind"
+        style="@style/TextViewStyle"
+        android:layout_marginTop="@dimen/_10px_in720p"
+        android:text="类型：生活费" />
+
+    <TextView
+        android:id="@+id/time"
+        style="@style/TextViewStyle"
+        android:layout_marginTop="@dimen/_10px_in720p"
+        android:text="时间：2012-23-22" />
+
+    <TextView
+        android:id="@+id/note"
+        style="@style/TextViewStyle"
+        android:layout_marginTop="@dimen/_10px_in720p"
+        android:maxLines="3"
+        android:text="描述：早餐" />
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10px_in720p"
+        android:numColumns="4" />
+
+</LinearLayout>

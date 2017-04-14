@@ -15,6 +15,7 @@ public class WebUrlConfig {
     private static final String GETKINDS = HOST_NAME + "dbAction_getKinds.do?";//得到类型列表
     private static final String UPLOADACCOUNT = HOST_NAME + "dbAction_uploadAccount.do?";//上传账单系信息
     private static final String UPLOADHEADER = HOST_NAME + "dbAction_uploadHeader.do?";//上传头像
+    private static final String GETCHARTPIE = HOST_NAME + "dbAction_getPieData.do?";//统计图
 
     /**
      * 注册
@@ -77,6 +78,19 @@ public class WebUrlConfig {
      */
     public static String upLoadHeader(){
         return UPLOADHEADER;
+    }
+
+    /**
+     * 统计图
+     * @param userID
+     * @param type
+     * @param kind
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static String getChartPie(String userID,String type,String kind,String startTime,String endTime){
+        return GETCHARTPIE + "userID="+userID+"&type="+type+"&kind="+kind+"&startTime="+startTime+"&endTime="+endTime;
     }
 
 }

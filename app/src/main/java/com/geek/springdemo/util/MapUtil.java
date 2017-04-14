@@ -69,17 +69,12 @@ public class MapUtil {
      * 自定义点标记
      *
      * @param point
-     * @param adress
-     * @param time
-     * @param type   0默认点，1带点击事件
+     * @param address
      */
-    public void setPoint(LatLng point, String adress, String time, int type, String img, final int i) {
-//        mBaiduMap.clear();
-        // 创建InfoWindow展示的自定义view,显示详情对话框
-        TextView button = setPop(adress);
+    public void setPoint(LatLng point, String address, int res) {
 
         // 构建Marker图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromAssetWithDpi(img);
+        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(res);
 
         // 构建MarkerOption，用于在地图上添加Marker
         OverlayOptions option = new MarkerOptions().position(point)
@@ -102,30 +97,17 @@ public class MapUtil {
 
             @Override
             public boolean onMarkerClick(Marker arg0) {
-//                mBaiduMap.showInfoWindow(mInfoWindow);
-//                Log.i("TAG", "getTrainID" + ltrain.get(i).getTrainID());
+                mBaiduMap.showInfoWindow(mInfoWindow);
                 return false;
             }
         };
-        if (type == 1) {
-//            location_time.setText(time);
-//             显示InfoWindow
-//            mBaiduMap.showInfoWindow(mInfoWindow);
-            mBaiduMap.setOnMarkerClickListener(markClick);
-        }
+        mBaiduMap.setOnMarkerClickListener(markClick);
         // 在地图上添加Marker，并显示
         mBaiduMap.addOverlay(option);
         // 正常显示
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
-        if (type == 1) {
-            // 定义地图状态
-            updateStatus(point, level);
-        } else {
-            // 定义地图状态
-            updateStatus(point, level);
-        }
-
+        updateStatus(point, level);
     }
 
     /**

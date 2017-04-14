@@ -30,18 +30,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/all"
-            android:layout_width="@dimen/_186px_in720p"
-            android:layout_height="wrap_content"
-            android:background="@drawable/history_type_bg"
-            android:gravity="center"
-            android:padding="@dimen/_10px_in720p"
-            android:text="全部"
-            android:textColor="@drawable/income_color_bg"
-            android:textSize="@dimen/_32px_in720p" />
-
-        <TextView
-            android:layout_marginLeft="@dimen/_40px_in720p"
             android:id="@+id/income"
             android:layout_width="@dimen/_186px_in720p"
             android:layout_height="wrap_content"

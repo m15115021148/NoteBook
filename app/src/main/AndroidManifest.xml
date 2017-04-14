@@ -52,7 +52,7 @@
         <activity android:name=".activity.HistoryCheckActivity" />
         <activity android:name=".activity.HistoryDetailActivity" />
         <activity android:name=".activity.ReadyAccountActivity" />
-        <activity android:name=".activity.UserActivity"/>
+        <activity android:name=".activity.UserActivity" />
 
         <!-- 第三方百度定位AK -->
         <meta-data
@@ -63,13 +63,15 @@
             android:name="com.baidu.location.f"
             android:enabled="true"
             android:label="第三方定位服务"
-            android:process=":remote" >
-
+            android:process=":remote">
             <intent-filter>
                 <action android:name="com.baidu.location.service_v2.2" />
             </intent-filter>
-
         </service>
+
+        <activity android:name=".activity.AccountDetailActivity" />
+        <activity android:name=".activity.ImageActivity" />
+        <activity android:name=".activity.ChartsActivity"></activity>
     </application>
 
 </manifest>
