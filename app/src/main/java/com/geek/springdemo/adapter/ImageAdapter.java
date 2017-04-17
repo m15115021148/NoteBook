@@ -54,7 +54,10 @@ public class ImageAdapter extends BaseAdapter{
         }else{
             holder = (Holder) convertView.getTag();
         }
-        HttpImageUtil.loadImage(holder.img,mList.get(position));
+        if (mList.size()>0){
+            HttpImageUtil.loadImage(holder.img,mList.get(position));
+        }
+
         holder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

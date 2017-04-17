@@ -21,6 +21,7 @@ import org.xutils.x;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * Created by Administrator on 2017/3/14.

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/pop_txt_bg"
     tools:context="com.geek.springdemo.activity.ChartsActivity">
 
     <include
@@ -13,7 +14,9 @@
         android:layout_height="wrap_content" />
 
     <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_500px_in720p"/>
+        android:layout_height="@dimen/_500px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p" />
 
 </LinearLayout>
