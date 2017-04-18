@@ -2,13 +2,17 @@ package com.geek.springdemo.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -76,6 +80,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     private int inputType = 0;//上级页面类型
     private String permissionInfo;// 定位权限
     private LocationService locationService;
+    private LocationManager manager;// 定位管理器
 
 
     @Override
@@ -182,6 +187,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         mSure.setVisibility(View.VISIBLE);
         content.setText("保存");
         mKind.setText("请选择");
+        manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // after andrioid m,must request Permiision on runtime
         getPersimmions();
         inputType = getIntent().getIntExtra("inputType",0);
@@ -189,6 +195,10 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
             http = new HttpUtil(handler);
         }
         getKinds();
+        if (!isGPSEnable()) {
+            openGPSSettings();
+            return;
+        }
     }
 
     /**
@@ -241,6 +251,9 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
             mMoney.setTextColor(getResources().getColor(R.color.red_txt));
         }
         if (v == mKind){
+            if (mValues.size()<=0){
+                return;
+            }
             View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);
             WheelView wv = (WheelView) outerView.findViewById(R.id.wheel_view_wv);
             wv.setOffset(2);
@@ -446,4 +459,45 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         }
 
     };
+
+    /**
+     * 判断GPS是否可用
+     *
+     * @return
+     */
+    public boolean isGPSEnable() {
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+
+    /**
+     * 自动打开gps
+     */
+    private void openGPSSettings() {
+        LocationManager alm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (alm.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("提示");
+            builder.setMessage("是否开启GPS？");
+            builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        mContext.startActivity(intent);
+                    } catch (ActivityNotFoundException ex) {
+                        intent.setAction(Settings.ACTION_SETTINGS);
+                        try {
+                            mContext.startActivity(intent);
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            });
+            builder.setNegativeButton("否", null);
+            builder.show();
+        }
+    }
 }

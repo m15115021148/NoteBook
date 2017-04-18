@@ -149,12 +149,16 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
             mContext.finish();
         }
         if (v == mChart){
-            Intent intent = new Intent(mContext,ChartsActivity.class);
-            intent.putExtra("type",type);
-            intent.putExtra("kind",kind);
-            intent.putExtra("startTime",startTime);
-            intent.putExtra("endTime",endTime);
-            startActivity(intent);
+            if (mList.size()>0){
+                Intent intent = new Intent(mContext,ChartsActivity.class);
+                intent.putExtra("type",type);
+                intent.putExtra("kind",kind);
+                intent.putExtra("startTime",startTime);
+                intent.putExtra("endTime",endTime);
+                startActivity(intent);
+            }else{
+                ToastUtil.showBottomShort(mContext,"暂无数据，无法统计");
+            }
 
         }
     }

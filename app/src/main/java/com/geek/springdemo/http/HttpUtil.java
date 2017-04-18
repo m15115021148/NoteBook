@@ -23,8 +23,8 @@ public class HttpUtil {
     private Handler handler;// Handler对象
     //	private final String CHARSET = "GBK";// 编码与服务器端字符编码一致为GBK
     private final String CHARSET = "utf-8";// 编码与服务器端字符编码一致为utf-8
-    private final int TIMEOUT = 10000;// 连接超时,毫秒
-    private final int RETRYCOUNT = 2;// 重定向次数
+    private final int TIMEOUT = 5000;// 连接超时,毫秒
+    private final int RETRYCOUNT = 1;// 重定向次数
     /**
      * 请求结果成功
      */

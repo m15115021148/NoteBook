@@ -4,7 +4,7 @@ package com.geek.springdemo.model;
  * Created by Administrator on 2017/4/14.
  */
 
-public class ChartModel {
+public class PieModel {
     private String type;
     private String kind;
     private String money;

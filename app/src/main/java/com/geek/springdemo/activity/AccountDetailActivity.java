@@ -2,13 +2,11 @@ package com.geek.springdemo.activity;
 
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.geek.springdemo.R;
@@ -65,32 +63,32 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
         mTitle.setText("账单详情");
         model = (AccountsModel) getIntent().getSerializableExtra("AccountsModel");
 
-        if (model.getType().equals("1")){
+        if (model.getType().equals("1")) {
             mType.setText("支出");
-        }else if (model.getType().equals("0")){
+        } else if (model.getType().equals("0")) {
             mType.setText("收入");
         }
-        mMoney.setText(Html.fromHtml("金额："+"<font color='#acacac'>"+model.getMoney()+"</font>"));
-        mKind.setText(Html.fromHtml("类型："+"<font color='#acacac'>"+model.getKind()+"</font>"));
-        mTime.setText(Html.fromHtml("时间："+"<font color='#acacac'>"+model.getTime()+"</font>"));
-        mNote.setText(Html.fromHtml("描述："+"<font color='#acacac'>"+model.getNote()+"</font>"));
-        if (model.getImg()!=null&!model.getImg().equals("")){
+        mMoney.setText(Html.fromHtml("金额：" + "<font color='#acacac'>" + model.getMoney() + "</font>"));
+        mKind.setText(Html.fromHtml("类型：" + "<font color='#acacac'>" + model.getKind() + "</font>"));
+        mTime.setText(Html.fromHtml("时间：" + "<font color='#acacac'>" + model.getTime() + "</font>"));
+        mNote.setText(Html.fromHtml("描述：" + "<font color='#acacac'>" + model.getNote() + "</font>"));
+        if (model.getImg() != null & !model.getImg().equals("")) {
             String[] split = model.getImg().split(";");
-            if (split!=null&&split.length>0){
+            if (split != null && split.length > 0) {
                 initImageData(Arrays.asList(split));
             }
         }
 
-        mapUtil = new MapUtil(mContext,mMapView);
+        mapUtil = new MapUtil(mContext, mMapView);
         // 隐藏缩放控件
         mapUtil.hidezoomView();
-        latLng = new LatLng(Double.parseDouble(model.getLat()),Double.parseDouble(model.getLng()));
-        mapUtil.setMarkPoint(R.drawable.point,latLng);
+        latLng = new LatLng(Double.parseDouble(model.getLat()), Double.parseDouble(model.getLng()));
+        mapUtil.setMarkPoint(R.drawable.point, latLng);
     }
 
     @Override
     public void onClick(View v) {
-        if (v == mBack){
+        if (v == mBack) {
             mContext.finish();
         }
     }
