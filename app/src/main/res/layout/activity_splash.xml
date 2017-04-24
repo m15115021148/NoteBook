@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_sqlash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/grey"
+    android:orientation="vertical"
     tools:context="com.geek.springdemo.activity.SplashActivity">
 
+    <com.geek.springdemo.view.ParticleView
+        android:id="@+id/pv_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0867AB"
+        app:pv_host_text="Welcome"
+        app:pv_host_text_anim_time="2000"
+        app:pv_particle_text=".in"
+        app:pv_spread_anim_time="1000"
+        app:pv_text_anim_time="1500" />
 
 
 </LinearLayout>

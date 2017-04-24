@@ -16,6 +16,7 @@ import com.geek.springdemo.model.UserModel;
 import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
+import com.geek.springdemo.view.ParticleView;
 import com.geek.springdemo.view.RoundProgressDialog;
 
 import org.xutils.http.RequestParams;
@@ -27,6 +28,8 @@ public class SplashActivity extends BaseActivity implements Runnable {
     private SplashActivity mContext;
     private HttpUtil http;
     private RoundProgressDialog progressDialog;
+    @ViewInject(R.id.pv_1)
+    private ParticleView mPv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,9 @@ public class SplashActivity extends BaseActivity implements Runnable {
                         }
                     }
                     break;
+                case 2:
+                    mPv.startAnim();
+                    break;
                 default:
                     break;
             }
@@ -115,10 +121,18 @@ public class SplashActivity extends BaseActivity implements Runnable {
      * 初始化数据
      */
     private void initData() {
-        handler.postDelayed(this, 3000);
+//        handler.postDelayed(this, 3000);
+        mPv.postDelayed(this,200);
         if (http == null){
             http = new HttpUtil(handler);
         }
+        //动画结束回调
+        mPv.setOnParticleAnimListener(new ParticleView.ParticleAnimListener() {
+            @Override
+            public void onAnimationEnd() {
+                handler.sendEmptyMessage(1);
+            }
+        });
     }
 
     /**
@@ -143,6 +157,6 @@ public class SplashActivity extends BaseActivity implements Runnable {
 
     @Override
     public void run() {
-        handler.sendEmptyMessage(1);
+        handler.sendEmptyMessage(2);
     }
 }
