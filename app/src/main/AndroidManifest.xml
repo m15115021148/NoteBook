@@ -71,7 +71,8 @@
 
         <activity android:name=".activity.AccountDetailActivity" />
         <activity android:name=".activity.ImageActivity" />
-        <activity android:name=".activity.ChartsActivity"></activity>
+        <activity android:name=".activity.ChartsActivity" />
+        <activity android:name=".activity.SetActivity"></activity>
     </application>
 
 </manifest>

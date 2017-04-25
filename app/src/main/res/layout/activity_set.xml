@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_set"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pop_txt_bg"
+    android:orientation="vertical"
+    tools:context="com.geek.springdemo.activity.SetActivity">
+
+    <include
+        layout="@layout/include_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_90px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:background="@color/white"
+        android:padding="@dimen/_20px_in720p">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="关于"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_30px_in720p" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/_10px_in720p"
+            android:layout_toLeftOf="@+id/index"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_26px_in720p" />
+
+        <ImageView
+            android:id="@+id/index"
+            android:layout_width="@dimen/_18px_in720p"
+            android:layout_height="@dimen/_32px_in720p"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ru" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40px_in720p" />
+
+    <TextView
+        android:id="@+id/userExit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80px_in720p"
+        android:layout_margin="@dimen/_20px_in720p"
+        android:background="@drawable/user_exit_bg"
+        android:gravity="center"
+        android:text="注销帐号"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_30px_in720p" />
+
+</LinearLayout>

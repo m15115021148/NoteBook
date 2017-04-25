@@ -128,6 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         if (v == mBack){
+            onBackPressed();
             mContext.finish();
         }
         if (v == mRegister){
@@ -147,5 +148,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             psw = mPsw.getText().toString();
             login(mName.getText().toString(),mPsw.getText().toString());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //退出所有的activity
+        Intent intent = new Intent();
+        intent.setAction(BaseActivity.TAG_ESC_ACTIVITY);
+        sendBroadcast(intent);
+        finish();
     }
 }

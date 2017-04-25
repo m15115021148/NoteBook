@@ -185,7 +185,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                         Intent ready = new Intent(mContext,ReadyAccountActivity.class);
                         startActivity(ready);
                         break;
-                    case 3:
+                    case 3://设置
+                        Intent set = new Intent(mContext,SetActivity.class);
+                        startActivity(set);
                         break;
                     default:
                         break;
