@@ -59,6 +59,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private File saveFile;//上传文件夹
     @ViewInject(R.id.tel)
     private TextView mTel;//电话
+    @ViewInject(R.id.userName)
+    private TextView mUserName;//用户名
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +112,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private void initData(){
         verifyStoragePermissions(this);
         mBack.setOnClickListener(this);
-        mTitle.setText(MyApplication.userModel.getName());
+        mTitle.setVisibility(View.GONE);
+        mUserName.setText(MyApplication.userModel.getName());
         mHeader.setOnClickListener(this);
         HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
         mTel.setText(MyApplication.userModel.getTelphone());

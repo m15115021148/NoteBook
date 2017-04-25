@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_user"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/pop_txt_bg"
     tools:context="com.geek.springdemo.activity.UserActivity">
 
     <include
@@ -13,25 +14,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:background="@color/red_dan"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_400px_in720p">
 
+        <com.geek.springdemo.view.DiagonalView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/red_dan"
+            android:scaleType="centerCrop"
+            app:angle="15"
+            app:diagonalGravity="right" />
+
         <ImageView
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
             android:id="@+id/header"
-            android:layout_width="@dimen/_150px_in720p"
-            android:layout_height="@dimen/_150px_in720p"
-            android:layout_marginTop="@dimen/_80px_in720p"
-            android:background="@drawable/autor_pressed" />
+            android:layout_width="@dimen/_180px_in720p"
+            android:layout_height="@dimen/_180px_in720p"
+            android:layout_marginBottom="@dimen/_60px_in720p"
+            android:layout_marginLeft="@dimen/_40px_in720p"
+            android:src="@drawable/autor_pressed" />
+
+        <TextView
+            android:layout_marginBottom="@dimen/_10px_in720p"
+            android:layout_alignLeft="@+id/layout"
+            android:layout_above="@+id/layout"
+            android:layout_centerHorizontal="true"
+            android:text="11"
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black_dan"
+            android:textSize="@dimen/_32px_in720p" />
 
         <LinearLayout
-            android:layout_marginTop="@dimen/_40px_in720p"
+            android:id="@+id/layout"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -45,14 +70,16 @@
                 android:id="@+id/tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_32px_in720p" />
+                android:textColor="@color/black_dan"
+                android:textSize="@dimen/_30px_in720p" />
 
         </LinearLayout>
 
 
 
-    </LinearLayout>
+    </RelativeLayout>
+
+
 
 
 </LinearLayout>

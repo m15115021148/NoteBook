@@ -13,11 +13,11 @@
 
         <ImageView
             android:id="@+id/header"
-            android:layout_width="@dimen/_150px_in720p"
-            android:layout_height="@dimen/_150px_in720p"
+            android:layout_width="@dimen/_180px_in720p"
+            android:layout_height="@dimen/_180px_in720p"
             android:layout_marginLeft="@dimen/_40px_in720p"
             android:layout_marginTop="@dimen/_40px_in720p"
-            android:background="@drawable/autor_pressed" />
+            android:src="@drawable/autor_pressed" />
 
         <TextView
             android:id="@+id/userName"

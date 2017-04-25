@@ -13,4 +13,15 @@
         <attr name="pv_host_text_anim_time" format="integer"></attr>
     </declare-styleable>
 
+    <declare-styleable name="DiagonalView">
+        <attr name="angle" format="integer" />
+        <attr name="diagonalGravity" format="integer">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+            <flag name="bottom" value="4" />
+            <flag name="top" value="8" />
+        </attr>
+        <attr name="horizontalShift" format="dimension" />
+    </declare-styleable>
+
 </resources>
