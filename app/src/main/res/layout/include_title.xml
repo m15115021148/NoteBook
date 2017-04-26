@@ -51,7 +51,7 @@
                 android:layout_marginRight="@dimen/_20px_in720p"
                 android:maxLines="1"
                 android:textColor="@drawable/include_title_color"
-                android:textSize="@dimen/_32px_in720p" />
+                android:textSize="@dimen/_28px_in720p" />
 
         </LinearLayout>
 

@@ -26,4 +26,5 @@ public class RequestCode {
     public static final int UPLOADHEADER = 0x006;//上传头像
     public static final int GETCHARTPIE = 0x007;//统计图
     public static final int GETCHARTLINE = 0x008;//统计图
+    public static final int UPDATEACCOUNTNOTE = 0x009;//修改账单备注信息
 }

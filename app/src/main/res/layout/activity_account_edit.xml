@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_account_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pop_txt_bg"
+    android:orientation="vertical"
+    tools:context="com.geek.springdemo.activity.AccountEditActivity">
+
+    <include
+        layout="@layout/include_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_20px_in720p"
+        android:layout_marginTop="@dimen/_40px_in720p"
+        android:text="描述："
+        android:textColor="@color/black_dan"
+        android:textSize="@dimen/_30px_in720p" />
+
+    <EditText
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_300px_in720p"
+        android:layout_margin="@dimen/_20px_in720p"
+        android:background="@drawable/account_edit_bg"
+        android:ellipsize="end"
+        android:inputType="textMultiLine"
+        android:lines="10"
+        android:maxLines="10"
+        android:gravity="top"
+        android:padding="@dimen/_10px_in720p"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/_28px_in720p" />
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80px_in720p"
+        android:layout_margin="@dimen/_20px_in720p"
+        android:background="@drawable/user_exit_bg"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@drawable/include_title_color"
+        android:textSize="@dimen/_30px_in720p" />
+
+</LinearLayout>

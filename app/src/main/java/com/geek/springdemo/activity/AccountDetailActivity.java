@@ -1,5 +1,6 @@
 package com.geek.springdemo.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -47,6 +48,12 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private TextView mNote;//描述
     @ViewInject(R.id.gridView)
     private GridView mGv;//图片适配器
+    @ViewInject(R.id.more)
+    private LinearLayout mEdit;//编辑
+    @ViewInject(R.id.content)
+    private TextView edit;//内容
+    private String accountID="";//账单id
+    private String note = "";//描述内容
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +68,12 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private void initData(){
         mBack.setOnClickListener(this);
         mTitle.setText("账单详情");
+        mEdit.setVisibility(View.VISIBLE);
+        mEdit.setOnClickListener(this);
+        edit.setText("编辑");
         model = (AccountsModel) getIntent().getSerializableExtra("AccountsModel");
-
+        accountID = model.getAccountID();
+        note = model.getNote();
         if (model.getType().equals("1")) {
             mType.setText("支出");
         } else if (model.getType().equals("0")) {
@@ -91,6 +102,12 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
         if (v == mBack) {
             mContext.finish();
         }
+        if (v == mEdit){
+            Intent intent = new Intent(mContext,AccountEditActivity.class);
+            intent.putExtra("accountID",accountID);
+            intent.putExtra("note",note);
+            startActivityForResult(intent,101);
+        }
     }
 
     /**
@@ -99,5 +116,13 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private void initImageData(List<String> list){
         ImageAdapter adapter = new ImageAdapter(mContext,list);
         mGv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode==101){
+            String note = data.getStringExtra("note");
+            mNote.setText(Html.fromHtml("描述：" + "<font color='#acacac'>" + note + "</font>"));
+        }
     }
 }

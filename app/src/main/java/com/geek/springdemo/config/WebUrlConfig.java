@@ -17,6 +17,7 @@ public class WebUrlConfig {
     private static final String UPLOADHEADER = HOST_NAME + "dbAction_uploadHeader.do?";//上传头像
     private static final String GETCHARTPIE = HOST_NAME + "dbAction_getPieData.do?";//统计图
     private static final String GETCHARTLINE = HOST_NAME + "dbAction_getLineData.do?";//统计图
+    private static final String UPDATEACCOUNTNOTE = HOST_NAME + "dbAction_updateAccountNote.do?";//修改账单备注信息
 
     /**
      * 注册
@@ -105,6 +106,17 @@ public class WebUrlConfig {
      */
     public static String getChartLine(String userID,String type,String kind,String startTime,String endTime){
         return GETCHARTLINE + "userID="+userID+"&type="+type+"&kind="+kind+"&startTime="+startTime+"&endTime="+endTime;
+    }
+
+    /**
+     * 修改账单备注信息
+     * @param accountID
+     * @param userID
+     * @param note
+     * @return
+     */
+    public static String updateAccountNote(String accountID, String userID, String note){
+        return UPDATEACCOUNTNOTE + "accountID="+accountID+"&userID="+userID+"&note="+note;
     }
 }
 

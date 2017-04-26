@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @ViewInject(R.id.header)
     private ImageView mHeader;//头像
     private int currPos = 0;//当前位置
+    private MainContentAdapter mAdapter;//适配器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,12 +86,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                 case HttpUtil.EMPTY:
                     if (msg.arg1 == RequestCode.GETACCOUNTLIST){
                         mList.clear();
+                        if (mAdapter!=null)
+                            mAdapter.notifyDataSetChanged();
                         MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
                     }
                     break;
                 case HttpUtil.FAILURE:
                     if (msg.arg1 == RequestCode.GETACCOUNTLIST){
                         mList.clear();
+                        if (mAdapter!=null)
+                            mAdapter.notifyDataSetChanged();
                         MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
                     }
                     ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
@@ -150,8 +155,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
      * 初始化主体数据
      */
     private void initMainData(final List<AccountsModel> list){
-        MainContentAdapter adapter = new MainContentAdapter(mContext,list,this);
-        mLvMain.setAdapter(adapter);
+        mAdapter = new MainContentAdapter(mContext,list,this);
+        mLvMain.setAdapter(mAdapter);
         mLvMain.setSelection(currPos);
         mLvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -237,15 +242,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
     @Override
     public void onLooKDes(int pos) {
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == 100){
-//            startTime = DateUtil.getCurrentAgeTime(24*3);
-//            endTime = DateUtil.getCurrentDate();
-//            getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
-//        }
     }
 
 }

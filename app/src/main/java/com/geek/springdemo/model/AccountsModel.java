@@ -17,6 +17,15 @@ public class AccountsModel implements Serializable{
     private String lat;
     private String lng;
     private String address;
+    private String accountID;//数据库id
+
+    public String getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(String accountID) {
+        this.accountID = accountID;
+    }
 
     public String getLat() {
         return lat;
