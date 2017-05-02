@@ -106,6 +106,9 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
                     }
                     break;
                 case HttpUtil.FAILURE:
+                    if (msg.arg1 == RequestCode.GETKINDS){
+                        mValues.clear();
+                    }
                     ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
                     break;
                 case HttpUtil.LOADING:
@@ -174,6 +177,10 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
             mExpend.setSelected(true);
         }
         if (v == mKind){
+            if (mValues.size()<=0){
+                getKinds();
+                return;
+            }
             View outerView = LayoutInflater.from(this).inflate(R.layout.wheel_view, null);
             WheelView wv = (WheelView) outerView.findViewById(R.id.wheel_view_wv);
             wv.setOffset(2);

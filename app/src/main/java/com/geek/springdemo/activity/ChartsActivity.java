@@ -71,6 +71,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
             Color.rgb(220, 160, 40), Color.rgb(54, 107, 221), Color.rgb(195, 73, 17),
             Color.rgb(100, 50, 255), Color.rgb(225, 155, 23), Color.rgb(11, 200, 74),
             Color.rgb(67, 195, 17), Color.rgb(195, 73, 17), Color.rgb(194, 73, 106),
+            Color.rgb(12, 33, 199), Color.rgb(200, 100, 50), Color.rgb(123, 232, 106),
     };
     private int[] mColor = null;//颜色
     private double mSum;//总金额
@@ -210,7 +211,9 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         mPieChart.setRotationAngle(0);
         // enable rotation of the chart by touch
         mPieChart.setRotationEnabled(true);
-        mPieChart.setCenterText("总金额为：\n" + mSum + "\t\t\t");//中间不显示文本
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        format.setMaximumFractionDigits(2);
+        mPieChart.setCenterText("总金额为：\n" + format.format(mSum) + "\t\t\t");//中间不显示文本
         mPieChart.setCenterTextSize(15f);
         mPieChart.setCenterTextColor(Color.BLACK);
 
