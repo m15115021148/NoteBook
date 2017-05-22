@@ -92,7 +92,7 @@ public class MyApplication extends Application{
      * @param T AbsListView
      * @param txt 内容
      */
-    public static void setEmptyShowText(Context context, AbsListView T, String txt){
+    public static View setEmptyShowText(Context context, AbsListView T, String txt){
         TextView emptyView = new TextView(context);
         emptyView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         emptyView.setText(txt);
@@ -102,6 +102,7 @@ public class MyApplication extends Application{
         emptyView.setVisibility(View.GONE);
         ((ViewGroup)T.getParent()).addView(emptyView);
         T.setEmptyView(emptyView);
+        return emptyView;
     }
 
     /**
