@@ -218,8 +218,8 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
                 ToastUtil.showBottomShort(mContext,"终止时间不能小于起始时间");
                 return;
             }
-            if (DateUtil.getTwoTimeInterval(endTime,startTime)>30*24*60*60){
-                ToastUtil.showBottomShort(mContext,"时间差最大为30天");
+            if (DateUtil.getTwoTimeInterval(endTime,startTime)>61*24*60*60){
+                ToastUtil.showBottomShort(mContext,"时间差最大为3个月");
                 return;
             }
             Intent intent = new Intent(mContext,HistoryDetailActivity.class);

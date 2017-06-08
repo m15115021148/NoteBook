@@ -121,7 +121,6 @@ public class SplashActivity extends BaseActivity implements Runnable {
      * 初始化数据
      */
     private void initData() {
-//        handler.postDelayed(this, 3000);
         mPv.postDelayed(this,200);
         if (http == null){
             http = new HttpUtil(handler);

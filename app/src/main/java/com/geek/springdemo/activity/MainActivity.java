@@ -24,6 +24,9 @@ import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
 import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DateUtil;
 import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.ToastUtil;
@@ -32,6 +35,8 @@ import com.geek.springdemo.view.RoundProgressDialog;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +72,29 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         mContext = this;
         initData();
     }
+
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<AccountsModel>>() {
+
+        @Override
+        public void onNext(List<AccountsModel> accountsModels, int requestCode) {
+            if (requestCode == RequestCode.GETACCOUNTLIST){
+                mList.clear();
+                mList = accountsModels;
+                initMainData(mList);
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+            } else if (e instanceof ConnectException) {
+                ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+            }
+        }
+    };;
 
     private Handler handler = new Handler(){
         @Override
@@ -132,7 +160,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
         startTime = DateUtil.getCurrentAgeTime(24*3);
         endTime = DateUtil.getCurrentDate();
-        getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
+//        getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
+        RetrofitUtil.getInstance().getAccountList(
+                MyApplication.userModel.getUserID(),"","",startTime,endTime,"",
+                new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
+        );
+
     }
 
     /**
