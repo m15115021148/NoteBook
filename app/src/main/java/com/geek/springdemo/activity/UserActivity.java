@@ -23,6 +23,10 @@ import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
 import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.ResultModel;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.ProgressUploadListener;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DialogUtil;
 import com.geek.springdemo.util.FileNames;
 import com.geek.springdemo.util.ImageUtil;
@@ -36,9 +40,11 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.io.File;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 @ContentView(R.layout.activity_user)
-public class UserActivity extends BaseActivity implements View.OnClickListener {
+public class UserActivity extends BaseActivity implements View.OnClickListener,ProgressUploadListener {
     private UserActivity mContext;
     @ViewInject(R.id.back)
     private LinearLayout mBack;
@@ -61,6 +67,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
     private TextView mTel;//电话
     @ViewInject(R.id.userName)
     private TextView mUserName;//用户名
+    private String progress = "0%";//进度条
+    private ProgressSubscriber ps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,34 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         mContext = this;
         initData();
     }
+
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
+
+        @Override
+        public void onNext(ResultModel model, int requestCode) {
+            if (requestCode == RequestCode.UPLOADHEADER){
+                if ("1".equals(model.getResult())){
+                    ImageUtil.deleteFolder(saveFile);
+                    MyApplication.userModel.setPhoto(model.getMsg());
+                    HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
+                    ToastUtil.showBottomShort(mContext,"上传成功");
+                }else{
+                    ToastUtil.showBottomShort(mContext,model.getErrorMsg());
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+            } else if (e instanceof ConnectException) {
+                ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+            }
+        }
+    };
 
     private Handler handler = new Handler(){
         @Override
@@ -123,6 +159,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         if (http == null){
             http = new HttpUtil(handler);
         }
+
     }
 
     @Override
@@ -199,7 +236,13 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
                     Log.e("result","path:"+str);
                     FileNames names = new FileNames();
                     String path = ImageUtil.saveBitmap(saveFile.getPath(), ImageUtil.getSmallBitmap(str), names.getImageName());
-                    uploadHeader(MyApplication.userModel.getUserID(),path);
+
+//                    uploadHeader(MyApplication.userModel.getUserID(),path);
+                    ps = new ProgressSubscriber<>(mListener, mContext, RequestCode.UPLOADHEADER, true);
+                    RetrofitUtil.getInstance().uploadHeader(MyApplication.userModel.getUserID(),path,
+                            ps,this
+                            );
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -218,5 +261,13 @@ public class UserActivity extends BaseActivity implements View.OnClickListener {
         if (permission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, 1);
         }
+    }
+
+    /**
+     * 进度显示
+     */
+    @Override
+    public void onUploadProgress(String progress) {
+        ps.setProgress(progress);
     }
 }

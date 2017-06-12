@@ -1,8 +1,6 @@
 package com.geek.springdemo.activity;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
@@ -20,17 +18,13 @@ import com.geek.springdemo.adapter.MainContentAdapter;
 import com.geek.springdemo.adapter.MainLeftAdapter;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.rxjava.ProgressSubscriber;
 import com.geek.springdemo.rxjava.RetrofitUtil;
 import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DateUtil;
-import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.ToastUtil;
-import com.geek.springdemo.view.RoundProgressDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -53,8 +47,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private ListView mLvMain;//主体listView
     @ViewInject(R.id.account)
     private LinearLayout mAccount;//记账
-    private HttpUtil http;
-    private RoundProgressDialog progressDialog;
     private List<AccountsModel> mList = new ArrayList<>();//数据
     private String startTime = "";//开始时间
     private String endTime ="";//结束时间
@@ -80,7 +72,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
             if (requestCode == RequestCode.GETACCOUNTLIST){
                 mList.clear();
                 mList = accountsModels;
-                initMainData(mList);
+                if (mList.size()>0){
+                    initMainData(mList);
+                }else{
+                    mList.clear();
+                    if (mAdapter!=null)
+                        mAdapter.notifyDataSetChanged();
+                    MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
+                }
             }
         }
 
@@ -91,50 +90,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
             } else if (e instanceof ConnectException) {
                 ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
             } else {
+                mList.clear();
+                if (mAdapter!=null)
+                    mAdapter.notifyDataSetChanged();
+                MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
                 ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
             }
         }
     };;
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();// 关闭进度条
-            }
-            switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
-                        mList.clear();
-                        mList = ParserUtil.jsonToList(msg.obj.toString(),AccountsModel.class);
-                        initMainData(mList);
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
-                        mList.clear();
-                        if (mAdapter!=null)
-                            mAdapter.notifyDataSetChanged();
-                        MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
-                    }
-                    break;
-                case HttpUtil.FAILURE:
-                    if (msg.arg1 == RequestCode.GETACCOUNTLIST){
-                        mList.clear();
-                        if (mAdapter!=null)
-                            mAdapter.notifyDataSetChanged();
-                        MyApplication.setEmptyShowText(mContext,mLvMain,"暂无数据");
-                    }
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
-                    break;
-                case HttpUtil.LOADING:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     /**
      * 初始化菜单
@@ -146,9 +110,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         mAccount.setOnClickListener(this);
         mHeader.setOnClickListener(this);
 
-        if (http == null){
-            http = new HttpUtil(handler);
-        }
         mUserName.setText(MyApplication.userModel.getName());
         initLeftData();
 
@@ -160,28 +121,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
         startTime = DateUtil.getCurrentAgeTime(24*3);
         endTime = DateUtil.getCurrentDate();
-//        getAccountListData(MyApplication.userModel.getUserID(),"","",startTime,endTime,"");
-        RetrofitUtil.getInstance().getAccountList(
+
+        RetrofitUtil.getInstance()
+                .getAccountList(
                 MyApplication.userModel.getUserID(),"","",startTime,endTime,"",
                 new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
         );
 
-    }
-
-    /**
-     * 得到账单列表
-     */
-    private void getAccountListData(String userID,String type,String kind,String startTime,String endTime,String page){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.GETACCOUNTLIST, WebUrlConfig.getAccountsList(userID, type, kind, startTime, endTime, page));
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
     }
 
     /**

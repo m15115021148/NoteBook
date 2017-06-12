@@ -17,13 +17,25 @@ import rx.Subscriber;
  */
 public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener {
     private SubscriberOnNextListener<T> mListener;
+    private Context mContext;
     private ProgressDialogHandler mHandler;
     private int mRequestCode;
+    private boolean isShowPercentage = false;//是否显示上传进度
+    private String progress;
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
 
     public ProgressSubscriber(SubscriberOnNextListener<T> listener,
-                              Context context,String title,int requestCode){
+                              Context context, String title, int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
+        this.mContext = context;
         mHandler = new ProgressDialogHandler(context,this,true,title);
     }
 
@@ -31,12 +43,34 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
                               Context context,int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
+        this.mContext = context;
         mHandler = new ProgressDialogHandler(context,this,true,"");
+    }
+
+    public ProgressSubscriber(SubscriberOnNextListener<T> listener,
+                              Context context,int requestCode,boolean isProgress){
+        this.mListener = listener;
+        this.mRequestCode = requestCode;
+        this.isShowPercentage = isProgress;
+        this.mContext = context;
     }
 
     private void showProgressDialog(){
         if (mHandler != null) {
             Message msg = mHandler.obtainMessage(ProgressDialogHandler.SHOW_PROGRESS_DIALOG);
+            msg.arg1 = mRequestCode;
+            mHandler.sendMessage(msg);
+        }
+    }
+
+    /**
+     * 百分比
+     */
+    private void showProgressPercentage(){
+        mHandler = new ProgressDialogHandler(mContext,this,true,"");
+        mHandler.setProgress(getProgress());
+        if (mHandler != null) {
+            Message msg = mHandler.obtainMessage(ProgressDialogHandler.SHOW_PROGRESS_PERCENTAGE);
             msg.arg1 = mRequestCode;
             mHandler.sendMessage(msg);
         }
@@ -58,7 +92,12 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     @Override
     public void onStart() {
         super.onStart();
-        showProgressDialog();
+        if (!isShowPercentage){
+            showProgressDialog();
+        }else{
+            showProgressPercentage();
+        }
+
     }
 
     @Override
@@ -85,7 +124,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     @Override
     public void onNext(T t) {
         if (mListener != null){
-            Log.d("jack","result:"+ JSON.toJSONString(t));
+            Log.d("jack",JSON.toJSONString(t));
             mListener.onNext(t,mRequestCode);
         }
     }

@@ -7,8 +7,12 @@ import com.geek.springdemo.model.UserModel;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -16,7 +20,7 @@ import rx.Observable;
  * Created by chenMeng on 2017/6/1.
  */
 
-public interface WebConfig {
+public interface ApiConfig {
     @POST("dbAction_register.do")
     Observable<ResultModel> register(@Query("name") String name, @Query("password") String password);
 
@@ -42,4 +46,18 @@ public interface WebConfig {
             @Query("endTime") String endTime,
             @Query("page") String page
     );
+
+    @GET("dbAction_updateAccountNote.do")
+    Observable<ResultModel> updateAccountNote(
+            @Query("accountID") String accountID,
+            @Query("userID") String userID,
+            @Query("note") String note
+    );
+
+    @Multipart
+    @POST("dbAction_uploadHeader.do")//上传图片  文件
+    Observable<ResultModel> uploadHeader(
+            @Part MultipartBody.Part file,
+            @Part("userID") RequestBody userID
+            );
 }

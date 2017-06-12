@@ -123,6 +123,7 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
         if (resultCode==101){
             String note = data.getStringExtra("note");
             mNote.setText(Html.fromHtml("描述：" + "<font color='#acacac'>" + note + "</font>"));
+            this.note = note;
         }
     }
 }

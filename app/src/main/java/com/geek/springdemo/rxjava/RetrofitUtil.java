@@ -3,12 +3,14 @@ package com.geek.springdemo.rxjava;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.geek.springdemo.config.WebConfig;
+import com.geek.springdemo.config.ApiConfig;
 import com.geek.springdemo.config.WebHostConfig;
+import com.geek.springdemo.config.WebsConfig;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -32,12 +36,13 @@ import rx.schedulers.Schedulers;
  * Created by chenMeng on 2017/6/5.
  */
 
-public class RetrofitUtil {
+public class RetrofitUtil implements WebsConfig{
 
     public static final int DEFAULT_TIMEOUT = 5;//设置超时时间
     private Retrofit mRetrofit;
     private static RetrofitUtil mInstance;
-    private WebConfig mWebService;
+    private ApiConfig mApi;
+    private ApiConfig mApi1;
 
     /**
      * 私有构造方法
@@ -54,7 +59,7 @@ public class RetrofitUtil {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
-        mWebService = mRetrofit.create(WebConfig.class);
+        mApi = mRetrofit.create(ApiConfig.class);
     }
 
     /**
@@ -73,11 +78,11 @@ public class RetrofitUtil {
     /**
      * 打印返回的json数据拦截器
      */
-    private static final Interceptor sLoggingInterceptor = new Interceptor() {
+    private static Interceptor sLoggingInterceptor = new Interceptor() {
 
         @Override
         public Response intercept(Chain chain) throws IOException {
-            final Request request = chain.request();
+            Request request = chain.request();
             Buffer requestBuffer = new Buffer();
             if (request.body() != null) {
                 request.body().writeTo(requestBuffer);
@@ -86,8 +91,7 @@ public class RetrofitUtil {
             }
             //打印url信息
             Log.w("jack",request.url() + (request.body() != null ? getParseParams(request.body(), requestBuffer) : ""));
-            final Response response = chain.proceed(request);
-
+            Response response = chain.proceed(request);
             return response;
         }
     };
@@ -106,7 +110,7 @@ public class RetrofitUtil {
      * @param psw
      */
     public void register(String name, String psw, Subscriber<ResultModel> subscriber){
-        mWebService.register(name, psw)
+        mApi.register(name, psw)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -120,7 +124,7 @@ public class RetrofitUtil {
      * @param subscriber
      */
     public void login(String name, String psw, Subscriber<UserModel> subscriber){
-        mWebService.login(name, psw)
+        mApi.login(name, psw)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -130,8 +134,60 @@ public class RetrofitUtil {
     /**
      * 得到保存的记账信息
      */
+    @Override
     public void getAccountList(String userID, String type, String kind, String startTime, String endTime, String page, Subscriber<List<AccountsModel>> subscriber) {
-        mWebService.getAccountsList(userID, type, kind, startTime, endTime, page)
+        mApi.getAccountsList(userID, type, kind, startTime, endTime, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 修改账单备注信息
+     * @param accountID
+     * @param userID
+     * @param note
+     * @param subscriber
+     */
+    @Override
+    public void updateAccountNote(String accountID, String userID, String note, Subscriber<ResultModel> subscriber) {
+        mApi.updateAccountNote(accountID, userID, note)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 上传头像
+     * @param userID
+     * @param img
+     * @param subscriber
+     */
+    @Override
+    public void uploadHeader(String userID, String img,Subscriber<ResultModel> subscriber,ProgressUploadListener listener) {
+        UpLoadProgressInterceptor uploadInterceptor = new UpLoadProgressInterceptor(listener);
+        OkHttpClient builder = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)
+                .addInterceptor(sLoggingInterceptor)
+                .addInterceptor(uploadInterceptor)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .build();
+        mRetrofit = new Retrofit.Builder()
+                .client(builder)
+                .baseUrl(WebHostConfig.getHostName())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        mApi1 = mRetrofit.create(ApiConfig.class);
+
+        RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), userID);
+        File file = new File(img);
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("img", file.getName(), requestFile);
+
+        mApi1.uploadHeader(body, uid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
