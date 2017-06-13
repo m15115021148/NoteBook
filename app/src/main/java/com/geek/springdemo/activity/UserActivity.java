@@ -267,7 +267,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
      * 进度显示
      */
     @Override
-    public void onUploadProgress(String progress) {
-        ps.setProgress(progress);
+    public void onUploadProgress(long currentBytesCount, long totalBytesCount) {
+        String progress = (int) ((currentBytesCount*1.0)/totalBytesCount*100)+"%";
+        ps.setDialogMsg(progress);
     }
 }

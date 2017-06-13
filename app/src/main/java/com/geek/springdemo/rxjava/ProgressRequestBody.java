@@ -1,6 +1,5 @@
 package com.geek.springdemo.rxjava;
 
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -11,6 +10,9 @@ import okio.BufferedSink;
 import okio.ForwardingSink;
 import okio.Okio;
 import okio.Sink;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * 上传进度条
@@ -54,7 +56,10 @@ public class ProgressRequestBody extends RequestBody {
 
     class CountingSink extends ForwardingSink {
 
-        private long bytesWritten = 0;
+        //当前写入字节数
+        private long writtenBytesCount = 0L;
+        //总字节长度，避免多次调用contentLength()方法
+        private long totalBytesCount = 0L;
 
         public CountingSink(Sink delegate) {
             super(delegate);
@@ -63,9 +68,19 @@ public class ProgressRequestBody extends RequestBody {
         @Override
         public void write(Buffer source, long byteCount) throws IOException {
             super.write(source, byteCount);
-            bytesWritten += byteCount;
-            String progress = (int) ((bytesWritten*1.0)/contentLength()*100)+"%";
-            mListener.onUploadProgress(progress);
+            writtenBytesCount += byteCount;
+            //获得contentLength的值，后续不再调用
+            if (totalBytesCount == 0) {
+                totalBytesCount = contentLength();
+            }
+            Observable.just(writtenBytesCount)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Long>() {
+                        @Override
+                        public void call(Long aLong) {
+                            mListener.onUploadProgress(writtenBytesCount, totalBytesCount);
+                        }
+            });
         }
     }
 }

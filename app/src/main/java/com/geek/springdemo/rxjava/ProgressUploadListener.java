@@ -5,5 +5,5 @@ package com.geek.springdemo.rxjava;
  */
 
 public interface ProgressUploadListener {
-    void onUploadProgress(String progress);
+    void onUploadProgress(long currentBytesCount, long totalBytesCount);
 }

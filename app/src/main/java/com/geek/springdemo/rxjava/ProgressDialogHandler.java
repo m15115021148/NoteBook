@@ -1,11 +1,9 @@
 package com.geek.springdemo.rxjava;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.geek.springdemo.view.RoundProgressDialog;
 
@@ -24,19 +22,17 @@ public class ProgressDialogHandler extends Handler{
     private boolean cancelable;
     private ProgressCancelListener mProgressCancelListener;
     private String title;//标题
-    private String progress;//进度条
 
-    public String getProgress() {
-        return progress;
+    public RoundProgressDialog getPd() {
+        return pd;
     }
 
-    public void setProgress(String progress) {
-        this.progress = progress;
+    public void setPd(RoundProgressDialog pd) {
+        this.pd = pd;
     }
-
 
     public ProgressDialogHandler(Context context, ProgressCancelListener mProgressCancelListener,
-                                 boolean cancelable,String title) {
+                                 boolean cancelable, String title) {
         super();
         this.context = context;
         this.mProgressCancelListener = mProgressCancelListener;
@@ -79,8 +75,7 @@ public class ProgressDialogHandler extends Handler{
                 });
             }
             if (!pd.isShowing()) {
-                Log.e("result","progress:"+progress);
-                pd.setMessage(progress);
+                pd.setMessage(title);
                 pd.show();
             }
         }

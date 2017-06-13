@@ -17,25 +17,20 @@ import rx.Subscriber;
  */
 public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener {
     private SubscriberOnNextListener<T> mListener;
-    private Context mContext;
     private ProgressDialogHandler mHandler;
     private int mRequestCode;
     private boolean isShowPercentage = false;//是否显示上传进度
-    private String progress;
 
-    public String getProgress() {
-        return progress;
-    }
-
-    public void setProgress(String progress) {
-        this.progress = progress;
+    public ProgressSubscriber(SubscriberOnNextListener<T> listener,
+                              Context context){
+        this.mListener = listener;
+        mHandler = new ProgressDialogHandler(context,this,true,"");
     }
 
     public ProgressSubscriber(SubscriberOnNextListener<T> listener,
                               Context context, String title, int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
-        this.mContext = context;
         mHandler = new ProgressDialogHandler(context,this,true,title);
     }
 
@@ -43,7 +38,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
                               Context context,int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
-        this.mContext = context;
         mHandler = new ProgressDialogHandler(context,this,true,"");
     }
 
@@ -52,7 +46,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
         this.mListener = listener;
         this.mRequestCode = requestCode;
         this.isShowPercentage = isProgress;
-        this.mContext = context;
+        mHandler = new ProgressDialogHandler(context,this,true,"");
     }
 
     private void showProgressDialog(){
@@ -64,11 +58,19 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     }
 
     /**
+     * 设置显示的进度条
+     * @param progress
+     */
+    public void setDialogMsg(String progress){
+        if (mHandler != null) {
+            mHandler.getPd().setMessage(progress);
+        }
+    }
+
+    /**
      * 百分比
      */
     private void showProgressPercentage(){
-        mHandler = new ProgressDialogHandler(mContext,this,true,"");
-        mHandler.setProgress(getProgress());
         if (mHandler != null) {
             Message msg = mHandler.obtainMessage(ProgressDialogHandler.SHOW_PROGRESS_PERCENTAGE);
             msg.arg1 = mRequestCode;
