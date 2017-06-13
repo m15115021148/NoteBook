@@ -22,12 +22,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     private boolean isShowPercentage = false;//是否显示上传进度
 
     public ProgressSubscriber(SubscriberOnNextListener<T> listener,
-                              Context context){
-        this.mListener = listener;
-        mHandler = new ProgressDialogHandler(context,this,true,"");
-    }
-
-    public ProgressSubscriber(SubscriberOnNextListener<T> listener,
                               Context context, String title, int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;

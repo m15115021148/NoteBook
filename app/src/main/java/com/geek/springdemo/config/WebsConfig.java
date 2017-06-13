@@ -18,5 +18,5 @@ public interface WebsConfig {
     void login(String name, String psw, Subscriber<UserModel> subscriber);
     void getAccountList(String userID, String type, String kind, String startTime, String endTime, String page, Subscriber<List<AccountsModel>> subscriber);
     void updateAccountNote(String accountID, String userID, String note,Subscriber<ResultModel> subscriber);
-    void uploadHeader(String userID,String img,Subscriber<ResultModel> subscriber,ProgressUploadListener listener);
+    void uploadHeader(String userID,String img,Subscriber<ResultModel> subscriber);
 }

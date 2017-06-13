@@ -239,8 +239,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
 
 //                    uploadHeader(MyApplication.userModel.getUserID(),path);
                     ps = new ProgressSubscriber<>(mListener, mContext, RequestCode.UPLOADHEADER, true);
-                    RetrofitUtil.getInstance().uploadHeader(MyApplication.userModel.getUserID(),path,
-                            ps,this
+                    RetrofitUtil.getInstance(this).uploadHeader(MyApplication.userModel.getUserID(),path,
+                            ps
                             );
 
                 } catch (Exception e) {

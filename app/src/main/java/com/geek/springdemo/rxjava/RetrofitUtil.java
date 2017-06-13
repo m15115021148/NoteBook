@@ -41,27 +41,22 @@ import rx.schedulers.Schedulers;
 public class RetrofitUtil implements WebsConfig{
 
     public static final int DEFAULT_TIMEOUT = 5;//设置超时时间
-    private Retrofit mRetrofit;
-    private static RetrofitUtil mInstance;
+    private static RetrofitUtil mInstance;//无进度条
+    private static RetrofitUtil mInstanceProgress;//有进度显示
     private ApiConfig mApi;
-    private ApiConfig mApi1;
 
     /**
      * 私有构造方法
      */
     private RetrofitUtil(){
-        OkHttpClient builder = new OkHttpClient.Builder()
-                .retryOnConnectionFailure(true)
-                .addInterceptor(sLoggingInterceptor)
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .build();
-        mRetrofit = new Retrofit.Builder()
-                .client(builder)
-                .baseUrl(WebHostConfig.getHostName())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        mApi = mRetrofit.create(ApiConfig.class);
+        mApi = createManager(false,null);
+    }
+
+    /**
+     * 私有构造方法
+     */
+    private RetrofitUtil(ProgressUploadListener listener){
+        mApi = createManager(true,listener);
     }
 
     /**
@@ -75,6 +70,44 @@ public class RetrofitUtil implements WebsConfig{
             }
         }
         return mInstance;
+    }
+
+    /**
+     * 单例模式
+     * @param listener    显示百分比进度
+     * @return
+     */
+    public static RetrofitUtil getInstance(ProgressUploadListener listener){
+        if (mInstanceProgress == null){
+            synchronized (RetrofitUtil.class){
+                mInstanceProgress = new RetrofitUtil(listener);
+            }
+        }
+        return mInstanceProgress;
+    }
+
+    /**
+     * 配置请求属性
+     * @param isShowProgress
+     * @param listener
+     */
+    public ApiConfig createManager(boolean isShowProgress,ProgressUploadListener listener){
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.retryOnConnectionFailure(true);
+        builder.addInterceptor(sLoggingInterceptor);
+        if (isShowProgress && listener != null){
+            UpLoadProgressInterceptor uploadInterceptor = new UpLoadProgressInterceptor(listener);
+            builder.addInterceptor(uploadInterceptor);
+        }
+        builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .client(builder.build())
+                .baseUrl(WebHostConfig.getHostName())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(ApiConfig.class);
     }
 
     /**
@@ -111,6 +144,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param name
      * @param psw
      */
+    @Override
     public void register(String name, String psw, Subscriber<ResultModel> subscriber){
         mApi.register(name, psw)
                 .subscribeOn(Schedulers.io())
@@ -125,6 +159,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param psw
      * @param subscriber
      */
+    @Override
     public void login(String name, String psw, Subscriber<UserModel> subscriber){
         mApi.login(name, psw)
                 .subscribeOn(Schedulers.io())
@@ -168,28 +203,13 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void uploadHeader(String userID, String img,Subscriber<ResultModel> subscriber,ProgressUploadListener listener) {
-        UpLoadProgressInterceptor uploadInterceptor = new UpLoadProgressInterceptor(listener);
-        OkHttpClient builder = new OkHttpClient.Builder()
-                .retryOnConnectionFailure(true)
-                .addInterceptor(sLoggingInterceptor)
-                .addInterceptor(uploadInterceptor)
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .build();
-        mRetrofit = new Retrofit.Builder()
-                .client(builder)
-                .baseUrl(WebHostConfig.getHostName())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        mApi1 = mRetrofit.create(ApiConfig.class);
-
+    public void uploadHeader(String userID, String img,Subscriber<ResultModel> subscriber) {
         RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), userID);
         File file = new File(img);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("img", file.getName(), requestFile);
 
-        mApi1.uploadHeader(body, uid)
+        mApi.uploadHeader(body, uid)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
