@@ -78,7 +78,8 @@ public class ProgressRequestBody extends RequestBody {
                     .subscribe(new Action1<Long>() {
                         @Override
                         public void call(Long aLong) {
-                            mListener.onUploadProgress(writtenBytesCount, totalBytesCount);
+                            String progress = (int) ((writtenBytesCount*1.0)/totalBytesCount*100)+"%";
+                            mListener.onUploadProgress(progress);
                         }
             });
         }

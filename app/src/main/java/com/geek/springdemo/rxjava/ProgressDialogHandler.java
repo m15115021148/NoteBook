@@ -75,6 +75,7 @@ public class ProgressDialogHandler extends Handler{
                 });
             }
             if (!pd.isShowing()) {
+                title = "0%";
                 pd.setMessage(title);
                 pd.show();
             }
