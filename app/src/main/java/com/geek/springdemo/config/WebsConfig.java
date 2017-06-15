@@ -1,6 +1,7 @@
 package com.geek.springdemo.config;
 
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 import com.geek.springdemo.rxjava.ProgressUploadListener;
@@ -20,4 +21,5 @@ public interface WebsConfig {
     void updateAccountNote(String accountID, String userID, String note,Subscriber<ResultModel> subscriber);
     void uploadHeader(String userID,String img,Subscriber<ResultModel> subscriber);
     void uploadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address,Subscriber<ResultModel> subscriber);
+    void getKinds(Subscriber<List<KindModel>> subscriber);
 }

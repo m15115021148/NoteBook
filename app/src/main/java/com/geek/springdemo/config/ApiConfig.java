@@ -2,6 +2,7 @@ package com.geek.springdemo.config;
 
 
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 
@@ -73,4 +74,7 @@ public interface ApiConfig {
             @Query("lng") String lng,
             @Query("address") String address
     );
+
+    @GET("dbAction_getKinds.do")
+    Observable<List<KindModel>> getKinds();
 }

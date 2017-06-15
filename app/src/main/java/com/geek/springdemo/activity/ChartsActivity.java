@@ -62,8 +62,6 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     private HttpUtil http;
     @ViewInject(R.id.pieChart)
     private PieChart mPieChart;//饼形图
-    @ViewInject(R.id.lineChart)
-    private LineChart mLineChart;//线形图
     private Typeface mTf;//字体样式
     private String[] mParties = null;
     private int[] sumColor = new int[]{

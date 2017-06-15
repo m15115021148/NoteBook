@@ -4,8 +4,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,23 +11,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geek.springdemo.R;
-import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.KindModel;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DateUtil;
-import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.ToastUtil;
 import com.geek.springdemo.view.NumericWheelAdapter;
 import com.geek.springdemo.view.OnWheelChangedListener;
-import com.geek.springdemo.view.RoundProgressDialog;
 import com.geek.springdemo.view.WheelTimeView;
 import com.geek.springdemo.view.WheelView;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,8 +55,6 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private List<String> mValues = new ArrayList<>();//类型数据
     private List<KindModel> mKindList = new ArrayList<>();
     private String kind = "";//类型
-    private RoundProgressDialog progressDialog;
-    private HttpUtil http;
     @ViewInject(R.id.startTime)
     private TextView mStartTime;//开始时间
     @ViewInject(R.id.endTime)
@@ -76,45 +72,32 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
         initData();
     }
 
-    private Handler handler = new Handler(){
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<KindModel>>() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();// 关闭进度条
+        public void onNext(List<KindModel> list, int requestCode) {
+            if (requestCode == RequestCode.GETKINDS){
+                mKindList.clear();
+                mKindList = list;
+                mValues.clear();
+                if (list.size()>0){
+                    for (KindModel model:mKindList){
+                        mValues.add(model.getKind());
+                    }
+                }
+                mValues.add(0,"全部");
+                mKind.setText(mValues.get(kindSelect));
+                kind = mValues.get(kindSelect);
             }
-            switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mKindList.clear();
-                        mKindList = ParserUtil.jsonToList(msg.obj.toString(),KindModel.class);
-                        mValues.clear();
-                        for (KindModel model:mKindList){
-                            mValues.add(model.getKind());
-                        }
-                        mValues.add(0,"全部");
-                        mKind.setText(mValues.get(kindSelect));
-                        kind = mValues.get(kindSelect);
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mValues.clear();
-                        mValues.add(0,"全部");
-                        mKind.setText(mValues.get(kindSelect));
-                        kind = mValues.get(kindSelect);
-                    }
-                    break;
-                case HttpUtil.FAILURE:
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mValues.clear();
-                    }
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
-                    break;
-                case HttpUtil.LOADING:
-                    break;
-                default:
-                    break;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+            } else if (e instanceof ConnectException) {
+                ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
             }
         }
     };
@@ -137,9 +120,7 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
         mEndTime.setOnClickListener(this);
         startTime = DateUtil.getCurrentAgeTime(24*3);//3t的时间
         endTime = DateUtil.getCurrentDate();
-        if (http == null){
-            http = new HttpUtil(handler);
-        }
+
         mStartTime.setText(startTime);
         mEndTime.setText(endTime);
         getKinds();
@@ -149,17 +130,9 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
      * 得到常用类型
      */
     private void getKinds(){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.GETKINDS, WebUrlConfig.getKinds());
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
+        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<List<KindModel>>(mListener,mContext,RequestCode.GETKINDS));
     }
+
 
     @Override
     public void onClick(View v) {

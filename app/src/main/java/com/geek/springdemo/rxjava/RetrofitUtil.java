@@ -7,6 +7,7 @@ import com.geek.springdemo.config.ApiConfig;
 import com.geek.springdemo.config.WebHostConfig;
 import com.geek.springdemo.config.WebsConfig;
 import com.geek.springdemo.model.AccountsModel;
+import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 
@@ -31,7 +32,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -183,6 +186,12 @@ public class RetrofitUtil implements WebsConfig{
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<List<AccountsModel>, List<AccountsModel>>() {
+                    @Override
+                    public List<AccountsModel> call(List<AccountsModel> accountsModels) {
+                        return accountsModels;
+                    }
+                })
                 .subscribe(subscriber);
     }
 
@@ -228,6 +237,19 @@ public class RetrofitUtil implements WebsConfig{
     @Override
     public void uploadAccount(String userID, String type, String kind, String money, String note, String time, String lat, String lng, String address, Subscriber<ResultModel> subscriber) {
         mApi.uploadAccount(userID, type, kind, money, note, time, lat, lng, address)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 得到类型列表
+     * @param subscriber
+     */
+    @Override
+    public void getKinds(Subscriber<List<KindModel>> subscriber) {
+        mApi.getKinds()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
