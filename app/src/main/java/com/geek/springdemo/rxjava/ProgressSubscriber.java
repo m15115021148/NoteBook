@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Message;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSON;
 import com.geek.springdemo.config.RequestCode;
 
 import java.net.ConnectException;
@@ -120,7 +119,6 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
     @Override
     public void onNext(T t) {
         if (mListener != null){
-            Log.d("jack",JSON.toJSONString(t));
             mListener.onNext(t,mRequestCode);
         }
     }

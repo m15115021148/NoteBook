@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             if (e instanceof SocketTimeoutException) {
                 ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
             } else if (e instanceof ConnectException) {
-                ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+                ToastUtil.showBottomLong(mContext,RequestCode.ERRORINFO);
             } else {
                 ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
             }

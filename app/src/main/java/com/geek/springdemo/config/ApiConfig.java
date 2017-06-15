@@ -60,4 +60,17 @@ public interface ApiConfig {
             @Part MultipartBody.Part file,
             @Part("userID") RequestBody userID
             );
+
+    @POST("dbAction_uploadAccount.do")//上传账单系信息
+    Observable<ResultModel> uploadAccount(
+            @Query("userID") String userID,
+            @Query("type") String type,
+            @Query("kind") String kind,
+            @Query("money") String money,
+            @Query("note") String note,
+            @Query("time") String time,
+            @Query("lat") String lat,
+            @Query("lng") String lng,
+            @Query("address") String address
+    );
 }

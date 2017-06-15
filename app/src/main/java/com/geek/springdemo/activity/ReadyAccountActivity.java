@@ -22,13 +22,20 @@ import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
+import com.geek.springdemo.model.UserModel;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.ParserUtil;
+import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
 import com.geek.springdemo.view.RoundProgressDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +67,34 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
         mContext = this;
         initData();
     }
+
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
+
+        @Override
+        public void onNext(ResultModel model, int requestCode) {
+            if (requestCode==RequestCode.UPLOADACCOUNT){
+                if (model.getResult().equals("1")){
+                    ToastUtil.showBottomLong(mContext,"上传成功");
+                    MyApplication.db.delOneAccount(Integer.parseInt(mList.get(selPos).getId()));
+                    mList.remove(selPos);
+                    adapter.notifyDataSetChanged();
+                }else{
+                    ToastUtil.showBottomLong(mContext,model.getErrorMsg());
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+            } else if (e instanceof ConnectException) {
+                ToastUtil.showBottomLong(mContext,RequestCode.ERRORINFO);
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+            }
+        }
+    };
 
     private Handler handler = new Handler(){
         @Override
@@ -196,6 +231,8 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     public void onLooKDes(int pos) {
         selPos = pos;
         AccountsModel model = mList.get(pos);
-        upLoadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress());
+//        upLoadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress());
+        RetrofitUtil.getInstance().uploadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress(),
+                new ProgressSubscriber<ResultModel>(mListener,mContext,RequestCode.UPLOADACCOUNT));
     }
 }

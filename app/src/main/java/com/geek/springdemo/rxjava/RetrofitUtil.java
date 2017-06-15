@@ -1,6 +1,5 @@
 package com.geek.springdemo.rxjava;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -15,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -26,10 +26,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
+import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -126,7 +126,13 @@ public class RetrofitUtil implements WebsConfig{
             }
             //打印url信息
             Log.w("jack",request.url() + (request.body() != null ? getParseParams(request.body(), requestBuffer) : ""));
+
+            //打印得到的数据
             Response response = chain.proceed(request);
+            BufferedSource source = response.body().source();
+            source.request(Long.MAX_VALUE); // Buffer the entire body.
+            Buffer buffer = source.buffer();
+            Log.d("jack",buffer.clone().readString(Charset.forName("utf-8")));
             return response;
         }
     };
@@ -210,6 +216,18 @@ public class RetrofitUtil implements WebsConfig{
         MultipartBody.Part body = MultipartBody.Part.createFormData("img", file.getName(), requestFile);
 
         mApi.uploadHeader(body, uid)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 上传账单系信息
+     */
+    @Override
+    public void uploadAccount(String userID, String type, String kind, String money, String note, String time, String lat, String lng, String address, Subscriber<ResultModel> subscriber) {
+        mApi.uploadAccount(userID, type, kind, money, note, time, lat, lng, address)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

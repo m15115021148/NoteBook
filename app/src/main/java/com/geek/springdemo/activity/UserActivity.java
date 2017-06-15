@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
@@ -19,9 +17,7 @@ import android.widget.TextView;
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
 import com.geek.springdemo.http.HttpImageUtil;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.rxjava.ProgressSubscriber;
 import com.geek.springdemo.rxjava.ProgressUploadListener;
@@ -30,12 +26,9 @@ import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DialogUtil;
 import com.geek.springdemo.util.FileNames;
 import com.geek.springdemo.util.ImageUtil;
-import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.SystemFunUtil;
 import com.geek.springdemo.util.ToastUtil;
-import com.geek.springdemo.view.RoundProgressDialog;
 
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
@@ -60,14 +53,11 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
             Manifest.permission.CAMERA
             };
     private SystemFunUtil imgUtil;//相册
-    private HttpUtil http;
-    private RoundProgressDialog progressDialog;
     private File saveFile;//上传文件夹
     @ViewInject(R.id.tel)
     private TextView mTel;//电话
     @ViewInject(R.id.userName)
     private TextView mUserName;//用户名
-    private String progress = "0%";//进度条
     private ProgressSubscriber ps;
 
     @Override
@@ -105,43 +95,6 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
         }
     };
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.UPLOADHEADER) {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            progressDialog.dismiss();// 关闭进度条
-                        }
-                        ResultModel model = (ResultModel) ParserUtil.jsonToObject(msg.obj.toString(),ResultModel.class);
-                        if (model.getResult().equals("1")){
-                            ImageUtil.deleteFolder(saveFile);
-                            MyApplication.userModel.setPhoto(model.getMsg());
-                            HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
-                            ToastUtil.showBottomShort(mContext,"上传成功");
-                        }else{
-                            ToastUtil.showBottomShort(mContext,model.getErrorMsg());
-                        }
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    break;
-                case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
-                    break;
-                case HttpUtil.LOADING:
-                    if (msg.arg1 == RequestCode.UPLOADHEADER) {
-                        progressDialog.setMessage(msg.arg2 + "%");
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     /**
      * 初始化数据
      */
@@ -156,9 +109,6 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
         imgUtil = new SystemFunUtil(mContext);
         saveFile = imgUtil.createRootDirectory("upload");
         ImageUtil.deleteFolder(saveFile);
-        if (http == null){
-            http = new HttpUtil(handler);
-        }
 
     }
 
@@ -186,27 +136,6 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
         }
     }
 
-    /**
-     * 上传头像
-     * @param userID
-     * @param img
-     */
-    private void uploadHeader(String userID,String img){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            RequestParams params = http.getParams(WebUrlConfig.upLoadHeader());
-            params.addBodyParameter("userID",userID);
-            params.addBodyParameter("img",new File(img));
-            http.uploadFile(RequestCode.UPLOADHEADER,params);
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -222,7 +151,10 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
                     File file = new File(imgFile.getPath());
                     file.delete();
 
-                    uploadHeader(MyApplication.userModel.getUserID(),path);
+                    ps = new ProgressSubscriber<>(mListener, mContext, RequestCode.UPLOADHEADER, true);
+                    RetrofitUtil.getInstance(this).uploadHeader(MyApplication.userModel.getUserID(),path,
+                            ps
+                    );
 
                 }catch (Exception e){
                     e.printStackTrace();
@@ -237,7 +169,6 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
                     FileNames names = new FileNames();
                     String path = ImageUtil.saveBitmap(saveFile.getPath(), ImageUtil.getSmallBitmap(str), names.getImageName());
 
-//                    uploadHeader(MyApplication.userModel.getUserID(),path);
                     ps = new ProgressSubscriber<>(mListener, mContext, RequestCode.UPLOADHEADER, true);
                     RetrofitUtil.getInstance(this).uploadHeader(MyApplication.userModel.getUserID(),path,
                             ps

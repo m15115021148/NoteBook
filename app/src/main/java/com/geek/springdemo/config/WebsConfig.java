@@ -19,4 +19,5 @@ public interface WebsConfig {
     void getAccountList(String userID, String type, String kind, String startTime, String endTime, String page, Subscriber<List<AccountsModel>> subscriber);
     void updateAccountNote(String accountID, String userID, String note,Subscriber<ResultModel> subscriber);
     void uploadHeader(String userID,String img,Subscriber<ResultModel> subscriber);
+    void uploadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address,Subscriber<ResultModel> subscriber);
 }
