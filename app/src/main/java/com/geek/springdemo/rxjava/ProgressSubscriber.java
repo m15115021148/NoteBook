@@ -24,14 +24,14 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
                               Context context, String title, int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
-        mHandler = new ProgressDialogHandler(context,this,true,title);
+        mHandler = new ProgressDialogHandler(context,this,true,title,true);
     }
 
     public ProgressSubscriber(SubscriberOnNextListener<T> listener,
                               Context context,int requestCode){
         this.mListener = listener;
         this.mRequestCode = requestCode;
-        mHandler = new ProgressDialogHandler(context,this,true,"");
+        mHandler = new ProgressDialogHandler(context,this,true,"",true);
     }
 
     public ProgressSubscriber(SubscriberOnNextListener<T> listener,
@@ -39,7 +39,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
         this.mListener = listener;
         this.mRequestCode = requestCode;
         this.isShowPercentage = isProgress;
-        mHandler = new ProgressDialogHandler(context,this,true,"");
+        mHandler = new ProgressDialogHandler(context,this,true,"",isProgress);
     }
 
     private void showProgressDialog(){

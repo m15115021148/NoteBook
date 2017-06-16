@@ -10,43 +10,39 @@ import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DateUtil;
 import com.geek.springdemo.util.LocationService;
-import com.geek.springdemo.util.ParserUtil;
 import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
-import com.geek.springdemo.view.RoundProgressDialog;
 import com.geek.springdemo.view.WheelView;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @ContentView(R.layout.activity_account)
@@ -72,8 +68,6 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     private TextView content;//内容
     private int type = 0;// 类别选中的位置
     private int kindSelect = 0;//类型选中的位置
-    private RoundProgressDialog progressDialog;
-    private HttpUtil http;
     private List<KindModel> mKindList = new ArrayList<>();
     private List<String> mValues = new ArrayList<>();//类型数据
     private String kind = "";//类型
@@ -117,58 +111,36 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         locationService.start();// 定位SDK
     }
 
-    private Handler handler = new Handler(){
+    private SubscriberOnNextListener mKindListener = new SubscriberOnNextListener<List<KindModel>>() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();// 关闭进度条
+        public void onNext(List<KindModel> list, int requestCode) {
+            if (requestCode == RequestCode.GETKINDS){
+                mKindList.clear();
+                mKindList = list;
+                mValues.clear();
+                for (KindModel model:mKindList){
+                    mValues.add(model.getKind());
+                }
+                mKind.setText(mValues.get(kindSelect));
+                kind = mValues.get(kindSelect);
+                //保存类型 信息
+                PreferencesUtil.setListData(mContext,"kind",mValues);
             }
-            switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mKindList.clear();
-                        mKindList = ParserUtil.jsonToList(msg.obj.toString(),KindModel.class);
-                        mValues.clear();
-                        for (KindModel model:mKindList){
-                            mValues.add(model.getKind());
-                        }
-                        mKind.setText(mValues.get(kindSelect));
-                        kind = mValues.get(kindSelect);
-                        //保存类型 信息
-                        PreferencesUtil.setListData(mContext,"kind",mValues);
-                    }
-                    if (msg.arg1== RequestCode.UPLOADACCOUNT){
-                        ResultModel model = (ResultModel) ParserUtil.jsonToObject(msg.obj.toString(),ResultModel.class);
-                        if (model.getResult().equals("1")){
-                            ToastUtil.showBottomLong(mContext,"记账成功");
-                            setResult(100);
-                            mContext.finish();
-                        }else{
-                            ToastUtil.showBottomLong(mContext,model.getErrorMsg());
-                        }
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mValues = PreferencesUtil.getListData(mContext,"kind");
-                        mKind.setText(mValues.get(kindSelect));
-                        kind = mValues.get(kindSelect);
-                    }
-                    break;
-                case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, "服务器无法连接，使用本地保存");
-                    if (msg.arg1 == RequestCode.GETKINDS){
-                        mValues = PreferencesUtil.getListData(mContext,"kind");
-                        mKind.setText(mValues.get(kindSelect));
-                        kind = mValues.get(kindSelect);
-                    }
-                    break;
-                case HttpUtil.LOADING:
-                    break;
-                default:
-                    break;
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+//                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+            } else if (e instanceof ConnectException) {
+//                ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
             }
+            ToastUtil.showBottomLong(mContext, "服务器无法连接，使用本地保存");
+            mValues = PreferencesUtil.getListData(mContext,"kind");
+            mKind.setText(mValues.get(kindSelect));
+            kind = mValues.get(kindSelect);
         }
     };
 
@@ -191,9 +163,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         // after andrioid m,must request Permiision on runtime
         getPersimmions();
         inputType = getIntent().getIntExtra("inputType",0);
-        if (http == null){
-            http = new HttpUtil(handler);
-        }
+
         getKinds();
         if (!isGPSEnable()) {
             openGPSSettings();
@@ -205,32 +175,39 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
      * 得到常用类型
      */
     private void getKinds(){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.GETKINDS,WebUrlConfig.getKinds());
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
+        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<List<KindModel>>(mKindListener,mContext,RequestCode.GETKINDS));
     }
 
     /**
      * 提交信息
      */
     private void upLoadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.UPLOADACCOUNT,WebUrlConfig.upLoadAccount(userID, type, kind, money, note, time,lat,lng,address));
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
+        RetrofitUtil.getInstance().uploadAccount(userID,type,kind,money,note,time,lat,lng,address,
+                new ProgressSubscriber<ResultModel>(new SubscriberOnNextListener<ResultModel>() {
+                    @Override
+                    public void onNext(ResultModel model, int requestCode) {
+                        if (requestCode== RequestCode.UPLOADACCOUNT){
+                            if (model.getResult().equals("1")){
+                                ToastUtil.showBottomLong(mContext,"记账成功");
+                                setResult(100);
+                                mContext.finish();
+                            }else{
+                                ToastUtil.showBottomLong(mContext,model.getErrorMsg());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+                        } else if (e instanceof ConnectException) {
+                            ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+                        } else {
+                            ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+                        }
+                    }
+                },mContext,RequestCode.UPLOADACCOUNT));
     }
 
     @Override

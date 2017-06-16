@@ -10,24 +10,23 @@ import android.view.KeyEvent;
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.UserModel;
-import com.geek.springdemo.util.ParserUtil;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
 import com.geek.springdemo.view.ParticleView;
-import com.geek.springdemo.view.RoundProgressDialog;
 
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 @ContentView(R.layout.activity_splash)
 public class SplashActivity extends BaseActivity implements Runnable {
     private SplashActivity mContext;
-    private HttpUtil http;
-    private RoundProgressDialog progressDialog;
     @ViewInject(R.id.pv_1)
     private ParticleView mPv;
 
@@ -38,39 +37,50 @@ public class SplashActivity extends BaseActivity implements Runnable {
         initData();
     }
 
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<UserModel>() {
+
+        @Override
+        public void onNext(UserModel model, int requestCode) {
+            if (requestCode == RequestCode.LOGIN){
+                MyApplication.userModel = model;
+                if (MyApplication.userModel.getResult().equals("1")){
+                    Intent intent = new Intent(mContext,MainActivity.class);
+                    startActivity(intent);
+                    PreferencesUtil.setDataModel(mContext,"userModel",MyApplication.userModel);
+                    MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
+                    mContext.finish();
+                }else{//重新登录
+                    Intent intent = new Intent(mContext,LoginActivity.class);
+                    startActivity(intent);
+                    mContext.finish();
+                }
+            }
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            if (e instanceof SocketTimeoutException) {
+                ToastUtil.showBottomLong(mContext, "服务器无法连接，进入本地保存");
+            } else if (e instanceof ConnectException) {
+                ToastUtil.showBottomLong(mContext,"服务器无法连接，进入本地保存");
+            } else {
+                ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+            }
+//            ToastUtil.showBottomLong(mContext, "服务器无法连接，进入本地保存");
+            //预记账 页面
+            MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
+            Intent read = new Intent(mContext,ReadyAccountActivity.class);
+            startActivity(read);
+            mContext.finish();
+        }
+    };
+
+
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.LOGIN){
-                        MyApplication.userModel = (UserModel) ParserUtil.jsonToObject(msg.obj.toString(), UserModel.class);
-                        if (MyApplication.userModel.getResult().equals("1")){
-                            Intent intent = new Intent(mContext,MainActivity.class);
-                            startActivity(intent);
-                            PreferencesUtil.setDataModel(mContext,"userModel",MyApplication.userModel);
-                            MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
-                            mContext.finish();
-                        }else{//重新登录
-                            Intent intent = new Intent(mContext,LoginActivity.class);
-                            startActivity(intent);
-                            mContext.finish();
-                        }
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    break;
-                case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, "服务器无法连接，进入本地保存");
-                    //预记账 页面
-                    MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
-                    Intent read = new Intent(mContext,ReadyAccountActivity.class);
-                    startActivity(read);
-                    mContext.finish();
-                    break;
-                case HttpUtil.LOADING:
-                    break;
                 case 1:
                     if (PreferencesUtil.getFristLogin(mContext,"first")){//第一次登录
                         Intent intent = new Intent(mContext,LoginActivity.class);
@@ -104,11 +114,8 @@ public class SplashActivity extends BaseActivity implements Runnable {
      */
     private void login(String name,String psw){
         if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            RequestParams params = http.getParams(WebUrlConfig.getLogin());
-            params.addBodyParameter("name",name);
-            params.addBodyParameter("password",MyApplication.md5(psw));
-            http.sendPost(RequestCode.LOGIN, params);
+            RetrofitUtil.getInstance().login(name,MyApplication.md5(psw),
+                    new ProgressSubscriber<UserModel>(mListener,mContext,RequestCode.LOGIN,false));
         } else {//自动登录 没有网络 预记账页面
             MyApplication.userModel = PreferencesUtil.getDataModel(mContext,"userModel");
             Intent intent = new Intent(mContext,ReadyAccountActivity.class);
@@ -122,9 +129,6 @@ public class SplashActivity extends BaseActivity implements Runnable {
      */
     private void initData() {
         mPv.postDelayed(this,200);
-        if (http == null){
-            http = new HttpUtil(handler);
-        }
         //动画结束回调
         mPv.setOnParticleAnimListener(new ParticleView.ParticleAnimListener() {
             @Override
@@ -141,6 +145,7 @@ public class SplashActivity extends BaseActivity implements Runnable {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             handler.removeCallbacks(this);
+            mPv.removeCallbacks(this);
             mContext.finish();
         }
         return super.onKeyDown(keyCode, event);
@@ -150,6 +155,7 @@ public class SplashActivity extends BaseActivity implements Runnable {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(this);
+        mPv.removeCallbacks(this);
         //强制回收
         System.gc();
     }

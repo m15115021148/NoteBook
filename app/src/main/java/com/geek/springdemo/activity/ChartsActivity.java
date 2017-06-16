@@ -3,8 +3,6 @@ package com.geek.springdemo.activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,22 +14,16 @@ import com.geek.springdemo.R;
 import com.geek.springdemo.adapter.ChartLineAdapter;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.LineModel;
 import com.geek.springdemo.model.PieModel;
-import com.geek.springdemo.util.ParserUtil;
+import com.geek.springdemo.rxjava.ProgressSubscriber;
+import com.geek.springdemo.rxjava.RetrofitUtil;
+import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.ToastUtil;
-import com.geek.springdemo.view.RoundProgressDialog;
 import com.github.mikephil.charting.animation.AnimationEasing;
-import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
@@ -42,6 +34,8 @@ import com.github.mikephil.charting.utils.PercentFormatter;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +52,6 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     private TextView mTitle;
     private int type;//类别
     private String kind, startTime, endTime;//类型 开始时间 结束时间
-    private RoundProgressDialog progressDialog;
-    private HttpUtil http;
     @ViewInject(R.id.pieChart)
     private PieChart mPieChart;//饼形图
     private Typeface mTf;//字体样式
@@ -86,46 +78,6 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         initData();
     }
 
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();// 关闭进度条
-            }
-            switch (msg.what) {
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1 == RequestCode.GETCHARTPIE) {
-                        mPieList.clear();
-                        mPieList = ParserUtil.jsonToList(msg.obj.toString(), PieModel.class);
-                        initPieChart(mPieList);
-                    }
-                    // XI线性
-                    if (msg.arg1 == RequestCode.GETCHARTLINE) {
-                        List<LineModel> list = ParserUtil.jsonToList(msg.obj.toString(), LineModel.class);
-                        initLineData(list);
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    if (msg.arg1 == RequestCode.GETCHARTPIE) {
-
-                    }
-                    // XI线性
-                    if (msg.arg1 == RequestCode.GETCHARTLINE) {
-
-                    }
-                    break;
-                case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
-                    break;
-                case HttpUtil.LOADING:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     /**
      * 初始化数据
      */
@@ -133,9 +85,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         mBack.setOnClickListener(this);
         mTitle.setText("统计图");
         mAnalyze.setOnClickListener(this);
-        if (http == null) {
-            http = new HttpUtil(handler);
-        }
+
         type = getIntent().getIntExtra("type", 0);
         if (type == 0) {
             mTitle.setText("收入统计图");
@@ -157,32 +107,56 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
      * 得到统计图 饼形图
      */
     private void getChart(String userID, String type, String kind, String startTime, String endTime) {
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.GETCHARTPIE, WebUrlConfig.getChartPie(userID, type, kind, startTime, endTime));
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
+        RetrofitUtil.getInstance().getPieData(userID,type,kind,startTime,endTime,
+                new ProgressSubscriber<List<PieModel>>(new SubscriberOnNextListener<List<PieModel>>() {
+                    @Override
+                    public void onNext(List<PieModel> pieModels, int requestCode) {
+                        if (requestCode == RequestCode.GETCHARTPIE) {
+                            mPieList.clear();
+                            mPieList = pieModels;
+                            initPieChart(mPieList);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+                        } else if (e instanceof ConnectException) {
+                            ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+                        } else {
+                            ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+                        }
+                    }
+                },mContext,RequestCode.GETCHARTPIE));
     }
 
     /**
      * 得到统计图 饼形图
      */
     private void getLineChart(String userID, String type, String kind, String startTime, String endTime) {
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.GETCHARTLINE, WebUrlConfig.getChartLine(userID, type, kind, startTime, endTime));
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
-        }
+        RetrofitUtil.getInstance().getLineData(userID,type,kind,startTime,endTime,
+                new ProgressSubscriber<List<LineModel>>(new SubscriberOnNextListener<List<LineModel>>() {
+                    @Override
+                    public void onNext(List<LineModel> lineModels, int requestCode) {
+                        // XI线性
+                        if (requestCode == RequestCode.GETCHARTLINE) {
+                            List<LineModel> list = lineModels;
+                            initLineData(list);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (e instanceof SocketTimeoutException) {
+                            ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
+                        } else if (e instanceof ConnectException) {
+                            ToastUtil.showBottomLong(mContext,RequestCode.NOLOGIN);
+                        } else {
+                            ToastUtil.showBottomLong(mContext, "onError:"+ e.getMessage());
+                        }
+                    }
+                },mContext,RequestCode.GETCHARTLINE));
     }
 
     /**

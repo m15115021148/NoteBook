@@ -1,12 +1,8 @@
 package com.geek.springdemo.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,20 +12,12 @@ import com.geek.springdemo.R;
 import com.geek.springdemo.adapter.MainContentAdapter;
 import com.geek.springdemo.application.MyApplication;
 import com.geek.springdemo.config.RequestCode;
-import com.geek.springdemo.config.WebUrlConfig;
-import com.geek.springdemo.db.DBAccount;
-import com.geek.springdemo.http.HttpUtil;
 import com.geek.springdemo.model.AccountsModel;
-import com.geek.springdemo.model.KindModel;
 import com.geek.springdemo.model.ResultModel;
-import com.geek.springdemo.model.UserModel;
 import com.geek.springdemo.rxjava.ProgressSubscriber;
 import com.geek.springdemo.rxjava.RetrofitUtil;
 import com.geek.springdemo.rxjava.SubscriberOnNextListener;
-import com.geek.springdemo.util.ParserUtil;
-import com.geek.springdemo.util.PreferencesUtil;
 import com.geek.springdemo.util.ToastUtil;
-import com.geek.springdemo.view.RoundProgressDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -53,8 +41,6 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout mAdd;//添加
     @ViewInject(R.id.content)
     private TextView content;//标题
-    private RoundProgressDialog progressDialog;
-    private HttpUtil http;
     private List<AccountsModel> mList = new ArrayList<>();//数据
     @ViewInject(R.id.main_listView)
     private ListView mLv;//listView
@@ -96,40 +82,6 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
         }
     };
 
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (progressDialog != null && progressDialog.isShowing()) {
-                progressDialog.dismiss();// 关闭进度条
-            }
-            switch (msg.what){
-                case HttpUtil.SUCCESS:
-                    if (msg.arg1== RequestCode.UPLOADACCOUNT){
-                        ResultModel model = (ResultModel) ParserUtil.jsonToObject(msg.obj.toString(),ResultModel.class);
-                        if (model.getResult().equals("1")){
-                            ToastUtil.showBottomLong(mContext,"上传成功");
-                            MyApplication.db.delOneAccount(Integer.parseInt(mList.get(selPos).getId()));
-                            mList.remove(selPos);
-                            adapter.notifyDataSetChanged();
-                        }else{
-                            ToastUtil.showBottomLong(mContext,model.getErrorMsg());
-                        }
-                    }
-                    break;
-                case HttpUtil.EMPTY:
-                    break;
-                case HttpUtil.FAILURE:
-                    ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
-                    break;
-                case HttpUtil.LOADING:
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     /**
      * 初始化数据
      */
@@ -139,9 +91,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
         mAdd.setOnClickListener(this);
         mAdd.setVisibility(View.VISIBLE);
         content.setText("添加");
-        if (http==null){
-            http = new HttpUtil(handler);
-        }
+
         mList.clear();
         Cursor cursor = MyApplication.db.queryDBCollectData();
         while(cursor.moveToNext()){
@@ -161,22 +111,6 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
             initMainData(mList);
         }else{
             MyApplication.setEmptyShowText(mContext,mLv,"暂无数据");
-        }
-    }
-
-    /**
-     * 提交信息
-     */
-    private void upLoadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
-        if (MyApplication.getNetObject().isNetConnected()) {
-            progressDialog = RoundProgressDialog.createDialog(mContext);
-            if (progressDialog != null && !progressDialog.isShowing()) {
-                progressDialog.setMessage("加载中...");
-                progressDialog.show();
-            }
-            http.sendGet(RequestCode.UPLOADACCOUNT, WebUrlConfig.upLoadAccount(userID, type, kind, money, note, time,lat,lng,address));
-        } else {
-            ToastUtil.showBottomShort(mContext, RequestCode.NOLOGIN);
         }
     }
 
@@ -231,7 +165,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     public void onLooKDes(int pos) {
         selPos = pos;
         AccountsModel model = mList.get(pos);
-//        upLoadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress());
+
         RetrofitUtil.getInstance().uploadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress(),
                 new ProgressSubscriber<ResultModel>(mListener,mContext,RequestCode.UPLOADACCOUNT));
     }

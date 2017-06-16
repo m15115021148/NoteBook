@@ -3,6 +3,8 @@ package com.geek.springdemo.config;
 
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.KindModel;
+import com.geek.springdemo.model.LineModel;
+import com.geek.springdemo.model.PieModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 
@@ -77,4 +79,22 @@ public interface ApiConfig {
 
     @GET("dbAction_getKinds.do")
     Observable<List<KindModel>> getKinds();
+
+    @GET("dbAction_getPieData.do")//统计图
+    Observable<List<PieModel>> getPieData(
+            @Query("userID") String userID,
+            @Query("type") String type,
+            @Query("kind") String kind,
+            @Query("startTime") String startTime,
+            @Query("endTime") String endTime
+    );
+
+    @GET("dbAction_getLineData.do")//统计图
+    Observable<List<LineModel>> getLineData(
+            @Query("userID") String userID,
+            @Query("type") String type,
+            @Query("kind") String kind,
+            @Query("startTime") String startTime,
+            @Query("endTime") String endTime
+    );
 }

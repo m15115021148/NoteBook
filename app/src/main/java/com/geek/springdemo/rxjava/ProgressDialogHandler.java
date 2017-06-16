@@ -22,6 +22,7 @@ public class ProgressDialogHandler extends Handler{
     private boolean cancelable;
     private ProgressCancelListener mProgressCancelListener;
     private String title;//标题
+    private boolean isShow ;//是否显示dialog
 
     public RoundProgressDialog getPd() {
         return pd;
@@ -32,12 +33,13 @@ public class ProgressDialogHandler extends Handler{
     }
 
     public ProgressDialogHandler(Context context, ProgressCancelListener mProgressCancelListener,
-                                 boolean cancelable, String title) {
+                                 boolean cancelable, String title,boolean isShow) {
         super();
         this.context = context;
         this.mProgressCancelListener = mProgressCancelListener;
         this.cancelable = cancelable;
         this.title = title.equals("")?"加载中...":title;
+        this.isShow = isShow;
     }
 
     private void initProgressDialog(){
@@ -52,9 +54,11 @@ public class ProgressDialogHandler extends Handler{
                     }
                 });
             }
-            if (!pd.isShowing()) {
-                pd.setMessage(title);
-                pd.show();
+            if (isShow){
+                if (!pd.isShowing()) {
+                    pd.setMessage(title);
+                    pd.show();
+                }
             }
         }
     }
@@ -74,16 +78,18 @@ public class ProgressDialogHandler extends Handler{
                     }
                 });
             }
-            if (!pd.isShowing()) {
-                title = "0%";
-                pd.setMessage(title);
-                pd.show();
+            if (isShow) {
+                if (!pd.isShowing()) {
+                    title = "0%";
+                    pd.setMessage(title);
+                    pd.show();
+                }
             }
         }
     }
 
     private void dismissProgressDialog(){
-        if (pd != null) {
+        if (pd != null && pd.isShowing()) {
             pd.dismiss();
             pd = null;
         }

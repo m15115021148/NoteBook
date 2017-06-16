@@ -8,6 +8,8 @@ import com.geek.springdemo.config.WebHostConfig;
 import com.geek.springdemo.config.WebsConfig;
 import com.geek.springdemo.model.AccountsModel;
 import com.geek.springdemo.model.KindModel;
+import com.geek.springdemo.model.LineModel;
+import com.geek.springdemo.model.PieModel;
 import com.geek.springdemo.model.ResultModel;
 import com.geek.springdemo.model.UserModel;
 
@@ -250,6 +252,32 @@ public class RetrofitUtil implements WebsConfig{
     @Override
     public void getKinds(Subscriber<List<KindModel>> subscriber) {
         mApi.getKinds()
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 得到统计图
+     * @param subscriber
+     */
+    @Override
+    public void getPieData(String userID, String type, String kind, String startTime, String endTime, Subscriber<List<PieModel>> subscriber) {
+        mApi.getPieData(userID, type, kind, startTime, endTime)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 得到统计图
+     * @param subscriber
+     */
+    @Override
+    public void getLineData(String userID, String type, String kind, String startTime, String endTime, Subscriber<List<LineModel>> subscriber) {
+        mApi.getLineData(userID, type, kind, startTime, endTime)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
