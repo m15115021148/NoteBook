@@ -36,7 +36,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     @ViewInject(R.id.title)
     private TextView mTitle;
     private int type;//类别
-    private String kind, startTime, endTime;//类型 开始时间 结束时间
+    private String kind, startTime, endTime,note;//类型 开始时间 结束时间 备注
     private List<AccountsModel> mList = new ArrayList<>();//数据
     @ViewInject(R.id.listView)
     private ListView mLv;//listView
@@ -79,14 +79,14 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
             if (e instanceof SocketTimeoutException) {
                 ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
             } else if (e instanceof ConnectException) {
-                ToastUtil.showBottomLong(mContext, RequestCode.NOLOGIN);
+                ToastUtil.showBottomLong(mContext, RequestCode.ERRORINFO);
             } else {
-                mList.clear();
-                if (mAdapter != null)
-                    mAdapter.notifyDataSetChanged();
-                MyApplication.setEmptyShowText(mContext, mLv, "暂无数据");
                 ToastUtil.showBottomLong(mContext, "onError:" + e.getMessage());
             }
+            mList.clear();
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
+            MyApplication.setEmptyShowText(mContext, mLv, "暂无数据");
         }
     };
 
@@ -108,20 +108,21 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
         kind = getIntent().getStringExtra("kind");
         startTime = getIntent().getStringExtra("startTime");
         endTime = getIntent().getStringExtra("endTime");
+        note = getIntent().getStringExtra("note");
         getAccountListData(
                 MyApplication.userModel.getUserID(),
                 String.valueOf(type).equals("2") ? "" : String.valueOf(type),
                 kind.equals("全部") ? "" : kind,
-                startTime, endTime, "");
+                startTime, endTime, note,"");
     }
 
     /**
      * 得到账单列表
      */
-    private void getAccountListData(String userID, String type, String kind, String startTime, String endTime, String page) {
+    private void getAccountListData(String userID, String type, String kind, String startTime, String endTime,String note, String page) {
         RetrofitUtil.getInstance()
                 .getAccountList(
-                        userID,type,kind,startTime,endTime,page,
+                        userID,type,kind,startTime,endTime,note,page,
                         new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
                 );
     }
@@ -149,6 +150,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
                 intent.putExtra("kind", kind);
                 intent.putExtra("startTime", startTime);
                 intent.putExtra("endTime", endTime);
+                intent.putExtra("note",note);
                 startActivity(intent);
             } else {
                 ToastUtil.showBottomShort(mContext, "暂无数据，无法统计");

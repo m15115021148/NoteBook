@@ -51,7 +51,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     @ViewInject(R.id.title)
     private TextView mTitle;
     private int type;//类别
-    private String kind, startTime, endTime;//类型 开始时间 结束时间
+    private String kind, startTime, endTime,note;//类型 开始时间 结束时间
     @ViewInject(R.id.pieChart)
     private PieChart mPieChart;//饼形图
     private Typeface mTf;//字体样式
@@ -95,19 +95,20 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
         kind = getIntent().getStringExtra("kind");
         startTime = getIntent().getStringExtra("startTime");
         endTime = getIntent().getStringExtra("endTime");
+        note = getIntent().getStringExtra("note");
         getChart(
                 MyApplication.userModel.getUserID(),
                 String.valueOf(type).equals("2") ? "" : String.valueOf(type),
                 kind.equals("全部") ? "" : kind,
-                startTime, endTime
+                startTime, endTime,note
         );
     }
 
     /**
      * 得到统计图 饼形图
      */
-    private void getChart(String userID, String type, String kind, String startTime, String endTime) {
-        RetrofitUtil.getInstance().getPieData(userID,type,kind,startTime,endTime,
+    private void getChart(String userID, String type, String kind, String startTime, String endTime,String note) {
+        RetrofitUtil.getInstance().getPieData(userID,type,kind,startTime,endTime,note,
                 new ProgressSubscriber<List<PieModel>>(new SubscriberOnNextListener<List<PieModel>>() {
                     @Override
                     public void onNext(List<PieModel> pieModels, int requestCode) {
@@ -134,8 +135,8 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     /**
      * 得到统计图 饼形图
      */
-    private void getLineChart(String userID, String type, String kind, String startTime, String endTime) {
-        RetrofitUtil.getInstance().getLineData(userID,type,kind,startTime,endTime,
+    private void getLineChart(String userID, String type, String kind, String startTime, String endTime,String note) {
+        RetrofitUtil.getInstance().getLineData(userID,type,kind,startTime,endTime,note,
                 new ProgressSubscriber<List<LineModel>>(new SubscriberOnNextListener<List<LineModel>>() {
                     @Override
                     public void onNext(List<LineModel> lineModels, int requestCode) {
@@ -267,7 +268,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
                         MyApplication.userModel.getUserID(),
                         String.valueOf(type).equals("2") ? "" : String.valueOf(type),
                         kind.equals("全部") ? "" : kind,
-                        startTime, endTime
+                        startTime, endTime,note
                 );
             }
         }

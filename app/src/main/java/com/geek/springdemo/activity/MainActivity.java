@@ -124,7 +124,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
         RetrofitUtil.getInstance()
                 .getAccountList(
-                MyApplication.userModel.getUserID(),"","",startTime,endTime,"",
+                MyApplication.userModel.getUserID(),"","",startTime,endTime,"","",
                 new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
         );
 
@@ -164,6 +164,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
                         startActivity(intent);
                         break;
                     case 1:
+                        Intent test = new Intent(mContext,TestActivity.class);
+                        startActivity(test);
                         break;
                     case 2://预记账
                         Intent ready = new Intent(mContext,ReadyAccountActivity.class);

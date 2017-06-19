@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -64,6 +65,11 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private String startTime,endTime;
     private Dialog dialog;//dialog
     private static int START_YEAR = 2000, END_YEAR = 2100;//起始年份，结束年份
+    @ViewInject(R.id.search)
+    private TextView mSearch;//筛选
+    @ViewInject(R.id.note)
+    private TextView mNote;//备注
+    private String note;//备注
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +124,7 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
         mSure.setOnClickListener(this);
         mStartTime.setOnClickListener(this);
         mEndTime.setOnClickListener(this);
+        mSearch.setOnClickListener(this);
         startTime = DateUtil.getCurrentAgeTime(24*3);//3t的时间
         endTime = DateUtil.getCurrentDate();
 
@@ -186,20 +193,31 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
         if (v == mEndTime){
             showDateTimePicker(2);
         }
+        if (v == mSearch){
+            if (!mNote.isShown()){
+                mNote.setVisibility(View.VISIBLE);
+            }else{
+                mNote.setVisibility(View.GONE);
+                mNote.setText("");
+                mNote.setHint("输入备注名");
+            }
+        }
         if (v == mSure){
             if (DateUtil.getTwoTimeInterval(endTime,startTime)<0){
                 ToastUtil.showBottomShort(mContext,"终止时间不能小于起始时间");
                 return;
             }
-            if (DateUtil.getTwoTimeInterval(endTime,startTime)>61*24*60*60){
+            if (DateUtil.getTwoTimeInterval(endTime,startTime)>63*24*60*60){
                 ToastUtil.showBottomShort(mContext,"时间差最大为3个月");
                 return;
             }
+            note = mNote.getText().toString();
             Intent intent = new Intent(mContext,HistoryDetailActivity.class);
             intent.putExtra("type",type);
             intent.putExtra("kind",kind);
             intent.putExtra("startTime",startTime);
             intent.putExtra("endTime",endTime);
+            intent.putExtra("note", TextUtils.isEmpty(note)?"":note);
             startActivity(intent);
         }
     }

@@ -53,7 +53,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- 极光需要权限 end -->
-
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -194,7 +193,8 @@
         <activity android:name=".activity.ImageActivity" />
         <activity android:name=".activity.ChartsActivity" />
         <activity android:name=".activity.SetActivity" />
-        <activity android:name=".activity.AccountEditActivity"></activity>
+        <activity android:name=".activity.AccountEditActivity" />
+        <activity android:name=".activity.TestActivity"></activity>
     </application>
 
 </manifest>

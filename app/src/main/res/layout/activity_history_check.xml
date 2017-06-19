@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white_dan"
     tools:context="com.geek.springdemo.activity.HistoryCheckActivity">
 
     <include
@@ -114,7 +115,6 @@
 
         <TextView
             android:id="@+id/startTime"
-            android:textSize="@dimen/_28px_in720p"
             android:layout_width="0dp"
             android:layout_height="@dimen/_60px_in720p"
             android:layout_marginLeft="@dimen/_40px_in720p"
@@ -122,11 +122,11 @@
             android:layout_weight="1"
             android:background="@drawable/history_type_bg"
             android:gravity="center"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/_28px_in720p" />
 
         <TextView
             android:id="@+id/endTime"
-            android:textSize="@dimen/_28px_in720p"
             android:layout_width="0dp"
             android:layout_height="@dimen/_60px_in720p"
             android:layout_marginLeft="@dimen/_40px_in720p"
@@ -134,7 +134,8 @@
             android:layout_weight="1"
             android:background="@drawable/history_type_bg"
             android:gravity="center"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="@dimen/_28px_in720p" />
 
     </LinearLayout>
 
@@ -146,18 +147,57 @@
         android:layout_marginTop="@dimen/_50px_in720p"
         android:background="@color/pop_txt_bg" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_40px_in720p"
+        android:layout_marginRight="@dimen/_40px_in720p"
+        android:layout_marginTop="@dimen/_20px_in720p"
+        android:gravity="right|center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/search"
+            android:layout_width="@dimen/_180px_in720p"
+            android:layout_height="@dimen/_50px_in720p"
+            android:background="@drawable/qz_30"
+            android:gravity="center"
+            android:text="高级筛选"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_26px_in720p" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/note"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_70px_in720p"
+            android:layout_marginTop="@dimen/_20px_in720p"
+            android:background="@drawable/money_bg"
+            android:ellipsize="end"
+            android:hint="输入备注名"
+            android:inputType="text"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:padding="@dimen/_10px_in720p"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_30px_in720p" />
+
+
+    </LinearLayout>
+
+
     <TextView
         android:id="@+id/sure"
-        android:textSize="@dimen/_32px_in720p"
-        android:gravity="center"
-        android:textColor="@drawable/history_sure_color"
-        android:text="查询"
-        android:background="@drawable/history_sure_bg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80px_in720p"
         android:layout_marginLeft="@dimen/_40px_in720p"
         android:layout_marginRight="@dimen/_40px_in720p"
-        android:layout_marginTop="@dimen/_100px_in720p" />
+        android:layout_marginTop="@dimen/_100px_in720p"
+        android:background="@drawable/history_sure_bg"
+        android:gravity="center"
+        android:text="查询"
+        android:textColor="@drawable/history_sure_color"
+        android:textSize="@dimen/_32px_in720p" />
 
 
 </LinearLayout>

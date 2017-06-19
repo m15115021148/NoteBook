@@ -47,6 +47,7 @@ public interface ApiConfig {
             @Query("kind") String kind,
             @Query("startTime") String startTime,
             @Query("endTime") String endTime,
+            @Query("note") String note,
             @Query("page") String page
     );
 
@@ -86,7 +87,8 @@ public interface ApiConfig {
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("startTime") String startTime,
-            @Query("endTime") String endTime
+            @Query("endTime") String endTime,
+            @Query("note") String note
     );
 
     @GET("dbAction_getLineData.do")//统计图
@@ -95,6 +97,7 @@ public interface ApiConfig {
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("startTime") String startTime,
-            @Query("endTime") String endTime
+            @Query("endTime") String endTime,
+            @Query("note") String note
     );
 }

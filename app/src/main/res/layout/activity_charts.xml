@@ -13,46 +13,57 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-
-    <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pieChart"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_500px_in720p"
-         />
-
-    <RelativeLayout
-        android:id="@+id/layoutAnalyze"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_90px_in720p"
-        android:background="@color/pop_txt_bg"
-        android:padding="@dimen/_20px_in720p">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="详情分析"
-            android:textColor="@color/black_dan"
-            android:textSize="@dimen/_32px_in720p" />
-
-        <ImageView
-            android:layout_width="@dimen/_17px_in720p"
-            android:layout_height="@dimen/_14px_in720p"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/chart_txt_bg" />
-
-    </RelativeLayout>
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:listSelector="#00000000"
+    <ScrollView
         android:overScrollMode="never"
-        android:scrollbars="none" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_500px_in720p" />
+
+            <RelativeLayout
+                android:id="@+id/layoutAnalyze"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90px_in720p"
+                android:background="@color/pop_txt_bg"
+                android:padding="@dimen/_20px_in720p">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="详情分析"
+                    android:textColor="@color/black_dan"
+                    android:textSize="@dimen/_32px_in720p" />
+
+                <ImageView
+                    android:layout_width="@dimen/_17px_in720p"
+                    android:layout_height="@dimen/_14px_in720p"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/chart_txt_bg" />
+
+            </RelativeLayout>
+
+            <com.geek.springdemo.view.MyListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:listSelector="#00000000"
+                android:overScrollMode="never"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

@@ -145,7 +145,7 @@ public class RetrofitUtil implements WebsConfig{
     @NonNull
     private static String getParseParams(RequestBody body, Buffer requestBuffer) throws UnsupportedEncodingException {
         if (body.contentType() != null && !body.contentType().toString().contains("multipart")) {
-            return URLDecoder.decode(requestBuffer.readUtf8(), "UTF-8");
+            return URLDecoder.decode(requestBuffer.clone().readUtf8(), "UTF-8");
         }
         return "";
     }
@@ -183,8 +183,8 @@ public class RetrofitUtil implements WebsConfig{
      * 得到保存的记账信息
      */
     @Override
-    public void getAccountList(String userID, String type, String kind, String startTime, String endTime, String page, Subscriber<List<AccountsModel>> subscriber) {
-        mApi.getAccountsList(userID, type, kind, startTime, endTime, page)
+    public void getAccountList(String userID, String type, String kind, String startTime, String endTime,String note, String page, Subscriber<List<AccountsModel>> subscriber) {
+        mApi.getAccountsList(userID, type, kind, startTime, endTime, note,page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -263,8 +263,8 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void getPieData(String userID, String type, String kind, String startTime, String endTime, Subscriber<List<PieModel>> subscriber) {
-        mApi.getPieData(userID, type, kind, startTime, endTime)
+    public void getPieData(String userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<PieModel>> subscriber) {
+        mApi.getPieData(userID, type, kind, startTime, endTime,note)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -276,8 +276,8 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void getLineData(String userID, String type, String kind, String startTime, String endTime, Subscriber<List<LineModel>> subscriber) {
-        mApi.getLineData(userID, type, kind, startTime, endTime)
+    public void getLineData(String userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<LineModel>> subscriber) {
+        mApi.getLineData(userID, type, kind, startTime, endTime,note)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
