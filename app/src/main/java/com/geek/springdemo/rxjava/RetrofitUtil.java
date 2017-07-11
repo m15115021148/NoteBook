@@ -130,7 +130,8 @@ public class RetrofitUtil implements WebsConfig{
 //                Log.d("jack", "request.body() == null");
             }
             //打印url信息
-            Log.w("jack",request.url() + (request.body() != null ? getParseParams(request.body(), requestBuffer) : ""));
+            Log.w("jack",URLDecoder.decode(request.url().toString(), "utf-8"));
+//            Log.w("jack",request.url() + (request.body() != null ? getParseParams(request.body(), requestBuffer) : ""));
 
             //打印得到的数据
             Response response = chain.proceed(request);

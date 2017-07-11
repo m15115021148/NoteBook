@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 
 import com.geek.springdemo.R;
 import com.geek.springdemo.application.MyApplication;
@@ -34,6 +35,7 @@ public class SplashActivity extends BaseActivity implements Runnable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//影藏系统状态栏
         initData();
     }
 
