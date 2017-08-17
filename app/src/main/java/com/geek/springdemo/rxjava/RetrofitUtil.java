@@ -104,6 +104,8 @@ public class RetrofitUtil implements WebsConfig{
             UpLoadProgressInterceptor uploadInterceptor = new UpLoadProgressInterceptor(listener);
             builder.addInterceptor(uploadInterceptor);
         }
+        builder.addInterceptor(new CacheInterceptor());
+        builder.addNetworkInterceptor(new CacheInterceptor());
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
 
         Retrofit retrofit = new Retrofit.Builder()
