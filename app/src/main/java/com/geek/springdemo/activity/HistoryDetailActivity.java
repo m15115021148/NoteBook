@@ -47,13 +47,6 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     private TextView content;//右侧标题
     private HistoryDetailListAdapter mAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<AccountsModel>>() {
 
         @Override
@@ -93,7 +86,8 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 初始化数据
      */
-    private void initData() {
+    protected void initData() {
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("数据详情");
         mChart.setOnClickListener(this);

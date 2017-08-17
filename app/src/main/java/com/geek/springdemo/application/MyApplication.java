@@ -21,9 +21,7 @@ import org.xutils.x;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
 
-import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2017/3/14.
@@ -53,8 +51,6 @@ public class MyApplication extends Application{
          */
         locationService = new LocationService(getApplicationContext());
         SDKInitializer.initialize(getApplicationContext());
-        JPushInterface.setDebugMode(true);// 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this);
     }
 
     /**

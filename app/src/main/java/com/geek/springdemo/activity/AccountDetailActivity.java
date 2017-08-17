@@ -55,17 +55,11 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private String accountID="";//账单id
     private String note = "";//描述内容
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("账单详情");
         mEdit.setVisibility(View.VISIBLE);

@@ -39,13 +39,6 @@ public class AccountEditActivity extends BaseActivity implements View.OnClickLis
     private String accountID="";//账单id
     private String note = "";//描述内容
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
 
         @Override
@@ -78,7 +71,8 @@ public class AccountEditActivity extends BaseActivity implements View.OnClickLis
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("编辑");
         mSave.setOnClickListener(this);

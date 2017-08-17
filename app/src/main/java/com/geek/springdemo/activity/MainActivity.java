@@ -1,7 +1,6 @@
 package com.geek.springdemo.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -24,6 +23,7 @@ import com.geek.springdemo.rxjava.ProgressSubscriber;
 import com.geek.springdemo.rxjava.RetrofitUtil;
 import com.geek.springdemo.rxjava.SubscriberOnNextListener;
 import com.geek.springdemo.util.DateUtil;
+import com.geek.springdemo.util.SystemManagerUtil;
 import com.geek.springdemo.util.ToastUtil;
 
 import org.xutils.view.annotation.ContentView;
@@ -37,8 +37,8 @@ import java.util.List;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity implements View.OnClickListener ,MainContentAdapter.OnCallBack{
     private MainActivity mContext;//本类
-    @ViewInject(R.id.mDrawerLayout)
-    private DrawerLayout mDrawerLayout;// 抽屉布局
+//    @ViewInject(R.id.mDrawerLayout)
+//    private DrawerLayout mDrawerLayout;// 抽屉布局
     @ViewInject(R.id.menu)
     private LinearLayout mMenuLeft;//左边菜单
     @ViewInject(R.id.listView)
@@ -57,13 +57,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private ImageView mHeader;//头像
     private int currPos = 0;//当前位置
     private MainContentAdapter mAdapter;//适配器
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
 
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<AccountsModel>>() {
 
@@ -103,9 +96,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     /**
      * 初始化菜单
      */
-    private void initData(){
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // 关闭手势滑动
-        mDrawerLayout.setFocusableInTouchMode(false);//可以点击返回键
+    protected void initData(){
+        mContext = this;
+//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // 关闭手势滑动
+//        mDrawerLayout.setFocusableInTouchMode(false);//可以点击返回键
         mMenuLeft.setOnClickListener(this);
         mAccount.setOnClickListener(this);
         mHeader.setOnClickListener(this);
@@ -116,7 +110,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
         HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());
         startTime = DateUtil.getCurrentAgeTime(24*3);
@@ -157,7 +151,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
         mLvLeft.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDrawerLayout.closeDrawers();
+//                mDrawerLayout.closeDrawers();
                 switch (position){
                     case 0://历史数据查询
                         Intent intent = new Intent(mContext,HistoryCheckActivity.class);
@@ -185,7 +179,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @Override
     public void onClick(View v) {
         if (v == mMenuLeft){
-            mDrawerLayout.openDrawer(Gravity.LEFT);
+//            mDrawerLayout.openDrawer(Gravity.LEFT);
         }
         if (v == mAccount){
             Intent intent = new Intent(mContext,AccountActivity.class);

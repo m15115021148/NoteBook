@@ -43,13 +43,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText mPsw;
     private String phone,psw;//手机 密码
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<Object>() {
 
         @Override
@@ -83,7 +76,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     };
 
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mRegister.setOnClickListener(this);
         mRegister.setVisibility(View.VISIBLE);

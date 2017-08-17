@@ -33,17 +33,11 @@ public class SetActivity extends BaseActivity implements View.OnClickListener {
     private PackageManager pm;//获得PackageManager对象
     private View dialog;//dialog
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("设置");
         mExit.setOnClickListener(this);

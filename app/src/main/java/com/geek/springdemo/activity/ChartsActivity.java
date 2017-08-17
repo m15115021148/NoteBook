@@ -71,17 +71,11 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     private RelativeLayout mAnalyze;//分析
     private List<PieModel> mPieList = new ArrayList<>();//饼形图 数据
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     /**
      * 初始化数据
      */
-    private void initData() {
+    protected void initData() {
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("统计图");
         mAnalyze.setOnClickListener(this);

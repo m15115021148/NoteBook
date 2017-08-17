@@ -38,13 +38,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @ViewInject(R.id.pswSure)
     private EditText mPswSure;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
         @Override
         public void onNext(ResultModel model, int requestCode) {
@@ -70,7 +63,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     };
 
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("注册");
         mSure.setOnClickListener(this);

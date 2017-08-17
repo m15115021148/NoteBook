@@ -23,7 +23,7 @@ public class ToastUtil {
 	 *            显示的内容
 	 */
 	public static void showCenterLong(Context context, String title) {
-		Toast toast = Toast.makeText(context, title, Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(context.getApplicationContext(), title, Toast.LENGTH_LONG);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}
@@ -37,7 +37,7 @@ public class ToastUtil {
 	 *            显示的内容
 	 */
 	public static void showCenterShort(Context context, String title) {
-		Toast toast = Toast.makeText(context, title, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(context.getApplicationContext(), title, Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}
@@ -50,7 +50,7 @@ public class ToastUtil {
 	 */
 	@SuppressWarnings("deprecation")
 	public static void showBottomLong(Context context, String title) {
-		Toast toast = Toast.makeText(context, title, Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(context.getApplicationContext(), title, Toast.LENGTH_LONG);
 		WindowManager manager = (WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE);
 		toast.setGravity(Gravity.BOTTOM, 0, manager.getDefaultDisplay()
@@ -66,7 +66,7 @@ public class ToastUtil {
 	 */
 	@SuppressWarnings("deprecation")
 	public static void showBottomShort(Context context, String title) {
-		Toast toast = Toast.makeText(context, title, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(context.getApplicationContext(), title, Toast.LENGTH_SHORT);
 		WindowManager manager = (WindowManager) context
 				.getSystemService(Context.WINDOW_SERVICE);
 		toast.setGravity(Gravity.BOTTOM, 0, manager.getDefaultDisplay()

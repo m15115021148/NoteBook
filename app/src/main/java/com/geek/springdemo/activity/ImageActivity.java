@@ -21,8 +21,7 @@ public class ImageActivity extends BaseActivity implements View.OnClickListener 
     private String path;//路径
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initData() {
         mContext = this;
         path = getIntent().getStringExtra("path");
         HttpImageUtil.loadImage(img, path);

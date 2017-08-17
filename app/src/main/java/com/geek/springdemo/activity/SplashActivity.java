@@ -31,14 +31,6 @@ public class SplashActivity extends BaseActivity implements Runnable {
     @ViewInject(R.id.pv_1)
     private ParticleView mPv;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//影藏系统状态栏
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<UserModel>() {
 
         @Override
@@ -129,7 +121,9 @@ public class SplashActivity extends BaseActivity implements Runnable {
     /**
      * 初始化数据
      */
-    private void initData() {
+    protected void initData() {
+        mContext = this;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);//影藏系统状态栏
         mPv.postDelayed(this,200);
         //动画结束回调
         mPv.setOnParticleAnimListener(new ParticleView.ParticleAnimListener() {

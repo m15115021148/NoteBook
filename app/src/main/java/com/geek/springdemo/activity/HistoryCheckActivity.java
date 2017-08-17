@@ -71,13 +71,6 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private TextView mNote;//备注
     private String note;//备注
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<KindModel>>() {
         @Override
         public void onNext(List<KindModel> list, int requestCode) {
@@ -111,7 +104,8 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("查询");
         mIncome.setOnClickListener(this);

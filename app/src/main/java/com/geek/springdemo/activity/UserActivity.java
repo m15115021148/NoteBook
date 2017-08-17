@@ -60,13 +60,6 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
     private TextView mUserName;//用户名
     private ProgressSubscriber ps;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
 
         @Override
@@ -98,7 +91,8 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         verifyStoragePermissions(this);
         mBack.setOnClickListener(this);
         mTitle.setVisibility(View.GONE);

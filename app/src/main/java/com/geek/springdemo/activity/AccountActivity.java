@@ -76,14 +76,6 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     private LocationService locationService;
     private LocationManager manager;// 定位管理器
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     /***
      * Stop location service
      */
@@ -147,7 +139,8 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("记账");
         mIncome.setOnClickListener(this);

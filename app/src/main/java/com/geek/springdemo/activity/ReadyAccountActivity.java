@@ -47,13 +47,6 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     private MainContentAdapter adapter;
     private int selPos = 0;//当前位置
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mContext = this;
-        initData();
-    }
-
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
 
         @Override
@@ -85,7 +78,8 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     /**
      * 初始化数据
      */
-    private void initData(){
+    protected void initData(){
+        mContext = this;
         mBack.setOnClickListener(this);
         mTitle.setText("预记账");
         mAdd.setOnClickListener(this);

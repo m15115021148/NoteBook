@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:background="@color/red_dan"
+        android:background="@color/themeColor"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_350px_in720p"
         android:gravity="center_vertical"

@@ -18,10 +18,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener{
     private CustomWebView webView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        webView.loadHtmlString("assets://b.html");
-//        webView.loadUrl("https://www.baidu.com/");
+    protected void initData() {
         webView.loadUrl("https://hao.360.cn/?a1004");
     }
 
