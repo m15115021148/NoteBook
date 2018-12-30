@@ -42,7 +42,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         @Override
         public void onNext(ResultModel model, int requestCode) {
             if (requestCode == RequestCode.REGISTER){
-                if (model.getResult().equals("1")){
+                if (model.getResult() == 1){
                     ToastUtil.showBottomLong(mContext,"注册成功");
                     mContext.finish();
                 }else{

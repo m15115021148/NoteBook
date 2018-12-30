@@ -18,11 +18,11 @@ import java.util.List;
 
 public class HistoryDetailListAdapter extends BaseAdapter{
     private Context mContext;
-    private List<AccountsModel> mList;
+    private List<AccountsModel.DataBean> mList;
     private Holder holder;
     private OnCallBackLook mCallBack;
 
-    public HistoryDetailListAdapter(Context context,List<AccountsModel> list,OnCallBackLook callBack){
+    public HistoryDetailListAdapter(Context context,List<AccountsModel.DataBean> list,OnCallBackLook callBack){
         this.mContext = context;
         this.mList = list;
         this.mCallBack = callBack;
@@ -60,7 +60,7 @@ public class HistoryDetailListAdapter extends BaseAdapter{
         }else{
             holder = (Holder) convertView.getTag();
         }
-        AccountsModel model = mList.get(position);
+        AccountsModel.DataBean model = mList.get(position);
         holder.kind.setText(model.getKind());
         holder.money.setText(model.getMoney());
         holder.time.setText(model.getTime().replace(" ","\n"));

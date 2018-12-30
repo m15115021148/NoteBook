@@ -19,11 +19,11 @@ import rx.Subscriber;
 public interface WebsConfig {
     void register(String name, String psw, Subscriber<ResultModel> subscriber);
     void login(String name, String psw, Subscriber<UserModel> subscriber);
-    void getAccountList(String userID, String type, String kind, String startTime, String endTime,String note, String page, Subscriber<List<AccountsModel>> subscriber);
-    void updateAccountNote(String accountID, String userID, String note,Subscriber<ResultModel> subscriber);
-    void uploadHeader(String userID,String img,Subscriber<ResultModel> subscriber);
-    void uploadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address,Subscriber<ResultModel> subscriber);
+    void getAccountList(int userID, String type, String kind, String startTime, String endTime,String note, int page, Subscriber<AccountsModel> subscriber);
+    void updateAccountNote(int accountID, int userID, String note,Subscriber<ResultModel> subscriber);
+    void uploadHeader(int userID,String img,Subscriber<ResultModel> subscriber);
+    void uploadAccount(int userID,String type,String kind,String money,String note,String time,String lat,String lng,String address,Subscriber<ResultModel> subscriber);
     void getKinds(Subscriber<List<KindModel>> subscriber);
-    void getPieData(String userID,String type,String kind,String startTime,String endTime ,String note,Subscriber<List<PieModel>> subscriber);
-    void getLineData(String userID,String type,String kind,String startTime,String endTime ,String note,Subscriber<List<LineModel>> subscriber);
+    void getPieData(int userID,String type,String kind,String startTime,String endTime ,String note,Subscriber<List<PieModel>> subscriber);
+    void getLineData(int userID,String type,String kind,String startTime,String endTime ,String note,Subscriber<List<LineModel>> subscriber);
 }

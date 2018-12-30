@@ -41,7 +41,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     private LinearLayout mAdd;//添加
     @ViewInject(R.id.content)
     private TextView content;//标题
-    private List<AccountsModel> mList = new ArrayList<>();//数据
+    private List<AccountsModel.DataBean> mList = new ArrayList<>();//数据
     @ViewInject(R.id.main_listView)
     private ListView mLv;//listView
     private MainContentAdapter adapter;
@@ -52,7 +52,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
         @Override
         public void onNext(ResultModel model, int requestCode) {
             if (requestCode==RequestCode.UPLOADACCOUNT){
-                if (model.getResult().equals("1")){
+                if (model.getResult()== 1){
                     ToastUtil.showBottomLong(mContext,"上传成功");
                     MyApplication.db.delOneAccount(Integer.parseInt(mList.get(selPos).getId()));
                     mList.remove(selPos);
@@ -89,7 +89,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
         mList.clear();
         Cursor cursor = MyApplication.db.queryDBCollectData();
         while(cursor.moveToNext()){
-            AccountsModel model = new AccountsModel();
+            AccountsModel.DataBean model = new AccountsModel.DataBean();
             model.setId(String.valueOf(cursor.getInt(0)));
             model.setType(String.valueOf(cursor.getInt(1)));
             model.setTime(cursor.getString(2));
@@ -111,7 +111,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     /**
      * 初始化主体数据
      */
-    private void initMainData(List<AccountsModel> list){
+    private void initMainData(List<AccountsModel.DataBean> list){
         adapter = new MainContentAdapter(mContext,list,this);
         mLv.setAdapter(adapter);
     }
@@ -134,7 +134,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
             mList.clear();
             Cursor cursor = MyApplication.db.queryDBCollectData();
             while(cursor.moveToNext()){
-                AccountsModel model = new AccountsModel();
+                AccountsModel.DataBean model = new AccountsModel.DataBean();
                 model.setId(String.valueOf(cursor.getInt(0)));
                 model.setType(String.valueOf(cursor.getInt(1)));
                 model.setTime(cursor.getString(2));
@@ -158,7 +158,7 @@ public class ReadyAccountActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onLooKDes(int pos) {
         selPos = pos;
-        AccountsModel model = mList.get(pos);
+        AccountsModel.DataBean model = mList.get(pos);
 
         RetrofitUtil.getInstance().uploadAccount(MyApplication.userModel.getUserID(),model.getType(),model.getKind(),model.getMoney(),model.getNote(),model.getTime(),model.getLat(),model.getLng(),model.getAddress(),
                 new ProgressSubscriber<ResultModel>(mListener,mContext,RequestCode.UPLOADACCOUNT));

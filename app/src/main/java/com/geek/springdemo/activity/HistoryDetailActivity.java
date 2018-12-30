@@ -37,7 +37,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     private TextView mTitle;
     private int type;//类别
     private String kind, startTime, endTime,note;//类型 开始时间 结束时间 备注
-    private List<AccountsModel> mList = new ArrayList<>();//数据
+    private List<AccountsModel.DataBean> mList = new ArrayList<>();//数据
     @ViewInject(R.id.listView)
     private ListView mLv;//listView
     private int currPos = 0;//当前位置
@@ -47,13 +47,13 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
     private TextView content;//右侧标题
     private HistoryDetailListAdapter mAdapter;
 
-    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<AccountsModel>>() {
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<AccountsModel>() {
 
         @Override
-        public void onNext(List<AccountsModel> list, int requestCode) {
+        public void onNext(AccountsModel list, int requestCode) {
             if (requestCode == RequestCode.GETACCOUNTLIST) {
                 mList.clear();
-                mList = list;
+                mList = list.getData();
                 if (mList.size() > 0) {
                     mChart.setVisibility(View.VISIBLE);
                     initListData(mList);
@@ -107,17 +107,17 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
                 MyApplication.userModel.getUserID(),
                 String.valueOf(type).equals("2") ? "" : String.valueOf(type),
                 kind.equals("全部") ? "" : kind,
-                startTime, endTime, note,"");
+                startTime, endTime, note,0);
     }
 
     /**
      * 得到账单列表
      */
-    private void getAccountListData(String userID, String type, String kind, String startTime, String endTime,String note, String page) {
+    private void getAccountListData(int userID, String type, String kind, String startTime, String endTime,String note, int page) {
         RetrofitUtil.getInstance()
                 .getAccountList(
                         userID,type,kind,startTime,endTime,note,page,
-                        new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
+                        new ProgressSubscriber<AccountsModel>(mListener,mContext,RequestCode.GETACCOUNTLIST)
                 );
     }
 
@@ -126,7 +126,7 @@ public class HistoryDetailActivity extends BaseActivity implements View.OnClickL
      *
      * @param list
      */
-    private void initListData(final List<AccountsModel> list) {
+    private void initListData(final List<AccountsModel.DataBean> list) {
         mAdapter = new HistoryDetailListAdapter(mContext, list, this);
         mLv.setAdapter(mAdapter);
         mLv.setSelection(currPos);

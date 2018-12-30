@@ -36,7 +36,7 @@ public class AccountEditActivity extends BaseActivity implements View.OnClickLis
     private TextView mNote;//编辑内容
     @ViewInject(R.id.save)
     private TextView mSave;//保存
-    private String accountID="";//账单id
+    private int accountID = 0;//账单id
     private String note = "";//描述内容
 
     private SubscriberOnNextListener mListener = new SubscriberOnNextListener<ResultModel>() {
@@ -44,7 +44,7 @@ public class AccountEditActivity extends BaseActivity implements View.OnClickLis
         @Override
         public void onNext(ResultModel model, int requestCode) {
             if (requestCode == RequestCode.UPDATEACCOUNTNOTE){
-                if ("1".equals(model.getResult())){
+                if (model.getResult() == 1){
                     ToastUtil.showBottomShort(mContext,"修改成功");
                     Intent intent = new Intent();
                     intent.putExtra("note",mNote.getText().toString());
@@ -76,7 +76,7 @@ public class AccountEditActivity extends BaseActivity implements View.OnClickLis
         mBack.setOnClickListener(this);
         mTitle.setText("编辑");
         mSave.setOnClickListener(this);
-        accountID = getIntent().getStringExtra("accountID");
+        accountID = getIntent().getIntExtra("accountID",0);
         note = getIntent().getStringExtra("note");
         mNote.setText(note);
     }

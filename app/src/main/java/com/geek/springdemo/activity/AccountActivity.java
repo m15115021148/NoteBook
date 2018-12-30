@@ -174,13 +174,13 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     /**
      * 提交信息
      */
-    private void upLoadAccount(String userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
+    private void upLoadAccount(int userID,String type,String kind,String money,String note,String time,String lat,String lng,String address){
         RetrofitUtil.getInstance().uploadAccount(userID,type,kind,money,note,time,lat,lng,address,
                 new ProgressSubscriber<ResultModel>(new SubscriberOnNextListener<ResultModel>() {
                     @Override
                     public void onNext(ResultModel model, int requestCode) {
                         if (requestCode== RequestCode.UPLOADACCOUNT){
-                            if (model.getResult().equals("1")){
+                            if (model.getResult()== 1){
                                 ToastUtil.showBottomLong(mContext,"记账成功");
                                 setResult(100);
                                 mContext.finish();
@@ -257,7 +257,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
             }
             String time = DateUtil.getCurrentDate();//当前时间
             if (inputType==1){//预记账
-                AccountsModel model = new AccountsModel();
+                AccountsModel.DataBean model = new AccountsModel.DataBean();
                 model.setType(String.valueOf(type));
                 model.setKind(kind);
                 model.setMoney(mMoney.getText().toString());

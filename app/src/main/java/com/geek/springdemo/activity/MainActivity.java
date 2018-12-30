@@ -37,8 +37,8 @@ import java.util.List;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity implements View.OnClickListener ,MainContentAdapter.OnCallBack{
     private MainActivity mContext;//本类
-//    @ViewInject(R.id.mDrawerLayout)
-//    private DrawerLayout mDrawerLayout;// 抽屉布局
+    @ViewInject(R.id.mDrawerLayout)
+    private DrawerLayout mDrawerLayout;// 抽屉布局
     @ViewInject(R.id.menu)
     private LinearLayout mMenuLeft;//左边菜单
     @ViewInject(R.id.listView)
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private ListView mLvMain;//主体listView
     @ViewInject(R.id.account)
     private LinearLayout mAccount;//记账
-    private List<AccountsModel> mList = new ArrayList<>();//数据
+    private List<AccountsModel.DataBean> mList = new ArrayList<>();//数据
     private String startTime = "";//开始时间
     private String endTime ="";//结束时间
     @ViewInject(R.id.userName)
@@ -58,13 +58,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     private int currPos = 0;//当前位置
     private MainContentAdapter mAdapter;//适配器
 
-    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<AccountsModel>>() {
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<AccountsModel>() {
 
         @Override
-        public void onNext(List<AccountsModel> accountsModels, int requestCode) {
+        public void onNext(AccountsModel accountsModels, int requestCode) {
             if (requestCode == RequestCode.GETACCOUNTLIST){
                 mList.clear();
-                mList = accountsModels;
+                mList = accountsModels.getData();
                 if (mList.size()>0){
                     initMainData(mList);
                 }else{
@@ -98,8 +98,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
      */
     protected void initData(){
         mContext = this;
-//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // 关闭手势滑动
-//        mDrawerLayout.setFocusableInTouchMode(false);//可以点击返回键
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); // 关闭手势滑动
+        mDrawerLayout.setFocusableInTouchMode(false);//可以点击返回键
         mMenuLeft.setOnClickListener(this);
         mAccount.setOnClickListener(this);
         mHeader.setOnClickListener(this);
@@ -118,8 +118,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
 
         RetrofitUtil.getInstance()
                 .getAccountList(
-                MyApplication.userModel.getUserID(),"","",startTime,endTime,"","",
-                new ProgressSubscriber<List<AccountsModel>>(mListener,mContext,RequestCode.GETACCOUNTLIST)
+                MyApplication.userModel.getUserID(),"","",startTime,endTime,"",0,
+                new ProgressSubscriber<AccountsModel>(mListener,mContext,RequestCode.GETACCOUNTLIST)
         );
 
     }
@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     /**
      * 初始化主体数据
      */
-    private void initMainData(final List<AccountsModel> list){
+    private void initMainData(final List<AccountsModel.DataBean> list){
         mAdapter = new MainContentAdapter(mContext,list,this);
         mLvMain.setAdapter(mAdapter);
         mLvMain.setSelection(currPos);
@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener ,
     @Override
     public void onClick(View v) {
         if (v == mMenuLeft){
-//            mDrawerLayout.openDrawer(Gravity.LEFT);
+            mDrawerLayout.openDrawer(Gravity.LEFT);
         }
         if (v == mAccount){
             Intent intent = new Intent(mContext,AccountActivity.class);

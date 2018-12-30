@@ -25,11 +25,11 @@ import java.util.List;
 
 public class MainContentAdapter extends BaseAdapter{
     private Context mContext;
-    private List<AccountsModel> mList;
+    private List<AccountsModel.DataBean> mList;
     private Holder holder;
     private OnCallBack mCallBack;
 
-    public MainContentAdapter(Context context,List<AccountsModel> list,OnCallBack callBack){
+    public MainContentAdapter(Context context,List<AccountsModel.DataBean> list,OnCallBack callBack){
         this.mContext = context;
         this.mList = list;
         this.mCallBack = callBack;
@@ -72,7 +72,7 @@ public class MainContentAdapter extends BaseAdapter{
         }else{
             holder = (Holder) convertView.getTag();
         }
-        AccountsModel model = mList.get(position);
+        AccountsModel.DataBean model = mList.get(position);
 
         if (model.getType().equals("0")){
             holder.type.setText("收入");

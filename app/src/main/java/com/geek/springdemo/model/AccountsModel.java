@@ -1,109 +1,124 @@
 package com.geek.springdemo.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by cmm on 2017/3/17.
  */
 
-public class AccountsModel implements Serializable{
-    private String id = "";//本地id
-    private String type;//0 收入  1支出
-    private String time;
-    private String img = "";
-    private String money;
-    private String kind;//类型
-    private String note;//备注
-    private String lat;
-    private String lng;
-    private String address;
-    private String accountID;//数据库id
+public class AccountsModel extends ResultModel implements Serializable{
 
-    public String getAccountID() {
-        return accountID;
+    private List<DataBean> data;
+
+    public List<DataBean> getData() {
+        return data;
     }
 
-    public void setAccountID(String accountID) {
-        this.accountID = accountID;
+    public void setData(List<DataBean> data) {
+        this.data = data;
     }
 
-    public String getLat() {
-        return lat;
-    }
+    public static class DataBean implements Serializable{
 
-    public void setLat(String lat) {
-        this.lat = lat;
-    }
+        private String id = "";//本地id
+        private String type;//0 收入  1支出
+        private String time;
+        private String img = "";
+        private String money;
+        private String kind;//类型
+        private String note;//备注
+        private String lat;
+        private String lng;
+        private String address;
+        private int accountID;//数据库id
 
-    public String getLng() {
-        return lng;
-    }
+        public int getAccountID() {
+            return accountID;
+        }
 
-    public void setLng(String lng) {
-        this.lng = lng;
-    }
+        public void setAccountID(int accountID) {
+            this.accountID = accountID;
+        }
 
-    public String getAddress() {
-        return address;
-    }
+        public String getLat() {
+            return lat;
+        }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+        public void setLat(String lat) {
+            this.lat = lat;
+        }
 
-    public String getId() {
-        return id;
-    }
+        public String getLng() {
+            return lng;
+        }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+        public void setLng(String lng) {
+            this.lng = lng;
+        }
 
-    public String getType() {
-        return type;
-    }
+        public String getAddress() {
+            return address;
+        }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+        public void setAddress(String address) {
+            this.address = address;
+        }
 
-    public String getTime() {
-        return time;
-    }
+        public String getId() {
+            return id;
+        }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
+        public void setId(String id) {
+            this.id = id;
+        }
 
-    public String getImg() {
-        return img;
-    }
+        public String getType() {
+            return type;
+        }
 
-    public void setImg(String img) {
-        this.img = img;
-    }
+        public void setType(String type) {
+            this.type = type;
+        }
 
-    public String getMoney() {
-        return money;
-    }
+        public String getTime() {
+            return time;
+        }
 
-    public void setMoney(String money) {
-        this.money = money;
-    }
+        public void setTime(String time) {
+            this.time = time;
+        }
 
-    public String getKind() {
-        return kind;
-    }
+        public String getImg() {
+            return img;
+        }
 
-    public void setKind(String kind) {
-        this.kind = kind;
-    }
+        public void setImg(String img) {
+            this.img = img;
+        }
 
-    public String getNote() {
-        return note;
-    }
+        public String getMoney() {
+            return money;
+        }
 
-    public void setNote(String note) {
-        this.note = note;
+        public void setMoney(String money) {
+            this.money = money;
+        }
+
+        public String getKind() {
+            return kind;
+        }
+
+        public void setKind(String kind) {
+            this.kind = kind;
+        }
+
+        public String getNote() {
+            return note;
+        }
+
+        public void setNote(String note) {
+            this.note = note;
+        }
     }
 }

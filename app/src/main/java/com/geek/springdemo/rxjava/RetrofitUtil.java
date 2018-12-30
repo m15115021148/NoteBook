@@ -186,14 +186,14 @@ public class RetrofitUtil implements WebsConfig{
      * 得到保存的记账信息
      */
     @Override
-    public void getAccountList(String userID, String type, String kind, String startTime, String endTime,String note, String page, Subscriber<List<AccountsModel>> subscriber) {
+    public void getAccountList(int userID, String type, String kind, String startTime, String endTime,String note, int page, Subscriber<AccountsModel> subscriber) {
         mApi.getAccountsList(userID, type, kind, startTime, endTime, note,page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<List<AccountsModel>, List<AccountsModel>>() {
+                .map(new Func1<AccountsModel, AccountsModel>() {
                     @Override
-                    public List<AccountsModel> call(List<AccountsModel> accountsModels) {
+                    public AccountsModel call(AccountsModel accountsModels) {
                         return accountsModels;
                     }
                 })
@@ -208,7 +208,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void updateAccountNote(String accountID, String userID, String note, Subscriber<ResultModel> subscriber) {
+    public void updateAccountNote(int accountID, int userID, String note, Subscriber<ResultModel> subscriber) {
         mApi.updateAccountNote(accountID, userID, note)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -223,8 +223,8 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void uploadHeader(String userID, String img,Subscriber<ResultModel> subscriber) {
-        RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), userID);
+    public void uploadHeader(int userID, String img,Subscriber<ResultModel> subscriber) {
+        RequestBody uid = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(userID));
         File file = new File(img);
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("img", file.getName(), requestFile);
@@ -240,7 +240,7 @@ public class RetrofitUtil implements WebsConfig{
      * 上传账单系信息
      */
     @Override
-    public void uploadAccount(String userID, String type, String kind, String money, String note, String time, String lat, String lng, String address, Subscriber<ResultModel> subscriber) {
+    public void uploadAccount(int userID, String type, String kind, String money, String note, String time, String lat, String lng, String address, Subscriber<ResultModel> subscriber) {
         mApi.uploadAccount(userID, type, kind, money, note, time, lat, lng, address)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -266,7 +266,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void getPieData(String userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<PieModel>> subscriber) {
+    public void getPieData(int userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<PieModel>> subscriber) {
         mApi.getPieData(userID, type, kind, startTime, endTime,note)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -279,7 +279,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void getLineData(String userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<LineModel>> subscriber) {
+    public void getLineData(int userID, String type, String kind, String startTime, String endTime, String note,Subscriber<List<LineModel>> subscriber) {
         mApi.getLineData(userID, type, kind, startTime, endTime,note)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

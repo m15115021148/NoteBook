@@ -9,9 +9,9 @@ package com.geek.springdemo.config;
 public class WebHostConfig {
 
 //    private static final String HOST_ADDRESS = "http://192.168.3.120:8080/";//meet
-    private static final String HOST_ADDRESS = "http://192.168.2.119:8989/";//office
+    private static final String HOST_ADDRESS = "http://192.168.12.170:8989/";//office
 //    private static final String HOST_ADDRESS = "http://1681654sp5.iask.in:29384/";//外网
-    private static final String HOST_NAME = HOST_ADDRESS + "MySSM/";
+    private static final String HOST_NAME = HOST_ADDRESS + "AccountDream/";
 
     public static String getHostAddress() {
         return HOST_ADDRESS;

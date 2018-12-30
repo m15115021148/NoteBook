@@ -49,20 +49,20 @@ public interface ApiConfig {
      * @return
      */
     @GET("dbAction_getAccountList.do")
-    Observable<List<AccountsModel>> getAccountsList(
-            @Query("userID") String userID,
+    Observable<AccountsModel> getAccountsList(
+            @Query("userID") int userID,
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("startTime") String startTime,
             @Query("endTime") String endTime,
             @Query("note") String note,
-            @Query("page") String page
+            @Query("page") int page
     );
 
     @GET("dbAction_updateAccountNote.do")
     Observable<ResultModel> updateAccountNote(
-            @Query("accountID") String accountID,
-            @Query("userID") String userID,
+            @Query("accountID") int accountID,
+            @Query("userID") int userID,
             @Query("note") String note
     );
 
@@ -75,7 +75,7 @@ public interface ApiConfig {
 
     @POST("dbAction_uploadAccount.do")//上传账单系信息
     Observable<ResultModel> uploadAccount(
-            @Query("userID") String userID,
+            @Query("userID") int userID,
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("money") String money,
@@ -91,7 +91,7 @@ public interface ApiConfig {
 
     @GET("dbAction_getPieData.do")//统计图
     Observable<List<PieModel>> getPieData(
-            @Query("userID") String userID,
+            @Query("userID") int userID,
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("startTime") String startTime,
@@ -101,7 +101,7 @@ public interface ApiConfig {
 
     @GET("dbAction_getLineData.do")//统计图
     Observable<List<LineModel>> getLineData(
-            @Query("userID") String userID,
+            @Query("userID") int userID,
             @Query("type") String type,
             @Query("kind") String kind,
             @Query("startTime") String startTime,

@@ -33,7 +33,7 @@ public class DBAccount {
 	/**
 	 *	插入数据
 	 */
-	public void insert(AccountsModel model){
+	public void insert(AccountsModel.DataBean model){
 		ContentValues values = new ContentValues();
 		values.put("type", model.getType());
 		values.put("money", model.getMoney());

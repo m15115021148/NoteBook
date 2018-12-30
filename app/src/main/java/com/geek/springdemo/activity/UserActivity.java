@@ -65,7 +65,7 @@ public class UserActivity extends BaseActivity implements View.OnClickListener,P
         @Override
         public void onNext(ResultModel model, int requestCode) {
             if (requestCode == RequestCode.UPLOADHEADER){
-                if ("1".equals(model.getResult())){
+                if (model.getResult() == 1){
                     ImageUtil.deleteFolder(saveFile);
                     MyApplication.userModel.setPhoto(model.getMsg());
                     HttpImageUtil.loadRoundImage(mHeader,MyApplication.userModel.getPhoto());

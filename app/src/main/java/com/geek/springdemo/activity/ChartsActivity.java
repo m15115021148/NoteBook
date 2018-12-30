@@ -101,7 +101,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     /**
      * 得到统计图 饼形图
      */
-    private void getChart(String userID, String type, String kind, String startTime, String endTime,String note) {
+    private void getChart(int userID, String type, String kind, String startTime, String endTime,String note) {
         RetrofitUtil.getInstance().getPieData(userID,type,kind,startTime,endTime,note,
                 new ProgressSubscriber<List<PieModel>>(new SubscriberOnNextListener<List<PieModel>>() {
                     @Override
@@ -129,7 +129,7 @@ public class ChartsActivity extends BaseActivity implements View.OnClickListener
     /**
      * 得到统计图 饼形图
      */
-    private void getLineChart(String userID, String type, String kind, String startTime, String endTime,String note) {
+    private void getLineChart(int userID, String type, String kind, String startTime, String endTime,String note) {
         RetrofitUtil.getInstance().getLineData(userID,type,kind,startTime,endTime,note,
                 new ProgressSubscriber<List<LineModel>>(new SubscriberOnNextListener<List<LineModel>>() {
                     @Override

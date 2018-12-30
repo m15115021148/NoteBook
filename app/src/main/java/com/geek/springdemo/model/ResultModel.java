@@ -5,7 +5,7 @@ package com.geek.springdemo.model;
  */
 
 public class ResultModel {
-    private String result;
+    private int result;
     private String errorMsg;
     private String msg;
 
@@ -17,11 +17,11 @@ public class ResultModel {
         this.msg = msg;
     }
 
-    public String getResult() {
+    public int getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(int result) {
         this.result = result;
     }
 

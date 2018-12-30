@@ -35,7 +35,7 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private MapView mMapView;
     private LatLng latLng;//点
     private MapUtil mapUtil;//地图工具
-    private AccountsModel model;//数据
+    private AccountsModel.DataBean model;//数据
     @ViewInject(R.id.type)
     private TextView mType;//类别
     @ViewInject(R.id.kind)
@@ -52,7 +52,7 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
     private LinearLayout mEdit;//编辑
     @ViewInject(R.id.content)
     private TextView edit;//内容
-    private String accountID="";//账单id
+    private int accountID = 0;//账单id
     private String note = "";//描述内容
 
     /**
@@ -65,7 +65,7 @@ public class AccountDetailActivity extends BaseActivity implements View.OnClickL
         mEdit.setVisibility(View.VISIBLE);
         mEdit.setOnClickListener(this);
         edit.setText("编辑");
-        model = (AccountsModel) getIntent().getSerializableExtra("AccountsModel");
+        model = (AccountsModel.DataBean) getIntent().getSerializableExtra("AccountsModel");
         accountID = model.getAccountID();
         note = model.getNote();
         if (model.getType().equals("1")) {
