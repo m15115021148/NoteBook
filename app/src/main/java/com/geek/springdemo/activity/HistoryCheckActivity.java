@@ -54,7 +54,7 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private int type = 0;// 类别选中的位置
     private int kindSelect = 0;//类型选中的位置
     private List<String> mValues = new ArrayList<>();//类型数据
-    private List<KindModel> mKindList = new ArrayList<>();
+    private List<KindModel.DateBean> mKindList = new ArrayList<>();
     private String kind = "";//类型
     @ViewInject(R.id.startTime)
     private TextView mStartTime;//开始时间
@@ -71,15 +71,15 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
     private TextView mNote;//备注
     private String note;//备注
 
-    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<List<KindModel>>() {
+    private SubscriberOnNextListener mListener = new SubscriberOnNextListener<KindModel>() {
         @Override
-        public void onNext(List<KindModel> list, int requestCode) {
+        public void onNext(KindModel list, int requestCode) {
             if (requestCode == RequestCode.GETKINDS){
                 mKindList.clear();
-                mKindList = list;
+                mKindList = list.getData();
                 mValues.clear();
-                if (list.size()>0){
-                    for (KindModel model:mKindList){
+                if (list.getData().size()>0){
+                    for (KindModel.DateBean model:mKindList){
                         mValues.add(model.getKind());
                     }
                 }
@@ -131,7 +131,7 @@ public class HistoryCheckActivity extends BaseActivity implements View.OnClickLi
      * 得到常用类型
      */
     private void getKinds(){
-        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<List<KindModel>>(mListener,mContext,RequestCode.GETKINDS));
+        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<KindModel>(mListener,mContext,RequestCode.GETKINDS));
     }
 
 

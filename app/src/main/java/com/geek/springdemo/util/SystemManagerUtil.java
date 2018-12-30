@@ -29,7 +29,7 @@ public class SystemManagerUtil {
 		mTintManager.setNavigationBarTintEnabled(true);
 		// 设置为蓝色
 		mTintManager.setTintColor(context.getResources().getColor(
-				R.color.themeColor));
+				R.color.title_bg));
 	}
 
 	// target是否为21设置状态栏的属性

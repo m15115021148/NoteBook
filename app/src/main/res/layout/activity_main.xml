@@ -19,7 +19,7 @@
             android:layout_height="@dimen/_90px_in720p"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:background="@color/red_dan">
+            android:background="@color/title_bg">
 
             <LinearLayout
                 android:id="@+id/menu"

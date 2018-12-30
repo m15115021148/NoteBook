@@ -253,7 +253,7 @@ public class RetrofitUtil implements WebsConfig{
      * @param subscriber
      */
     @Override
-    public void getKinds(Subscriber<List<KindModel>> subscriber) {
+    public void getKinds(Subscriber<KindModel> subscriber) {
         mApi.getKinds()
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

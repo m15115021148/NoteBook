@@ -87,7 +87,7 @@ public interface ApiConfig {
     );
 
     @GET("dbAction_getKinds.do")
-    Observable<List<KindModel>> getKinds();
+    Observable<KindModel> getKinds();
 
     @GET("dbAction_getPieData.do")//统计图
     Observable<List<PieModel>> getPieData(

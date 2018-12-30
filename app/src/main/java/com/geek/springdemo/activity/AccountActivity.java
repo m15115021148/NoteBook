@@ -68,7 +68,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
     private TextView content;//内容
     private int type = 0;// 类别选中的位置
     private int kindSelect = 0;//类型选中的位置
-    private List<KindModel> mKindList = new ArrayList<>();
+    private List<KindModel.DateBean> mKindList = new ArrayList<>();
     private List<String> mValues = new ArrayList<>();//类型数据
     private String kind = "";//类型
     private int inputType = 0;//上级页面类型
@@ -103,14 +103,14 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
         locationService.start();// 定位SDK
     }
 
-    private SubscriberOnNextListener mKindListener = new SubscriberOnNextListener<List<KindModel>>() {
+    private SubscriberOnNextListener mKindListener = new SubscriberOnNextListener<KindModel>() {
         @Override
-        public void onNext(List<KindModel> list, int requestCode) {
+        public void onNext(KindModel list, int requestCode) {
             if (requestCode == RequestCode.GETKINDS){
                 mKindList.clear();
-                mKindList = list;
+                mKindList = list.getData();
                 mValues.clear();
-                for (KindModel model:mKindList){
+                for (KindModel.DateBean model:mKindList){
                     mValues.add(model.getKind());
                 }
                 mKind.setText(mValues.get(kindSelect));
@@ -168,7 +168,7 @@ public class AccountActivity extends BaseActivity implements View.OnClickListene
      * 得到常用类型
      */
     private void getKinds(){
-        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<List<KindModel>>(mKindListener,mContext,RequestCode.GETKINDS));
+        RetrofitUtil.getInstance().getKinds(new ProgressSubscriber<KindModel>(mKindListener,mContext,RequestCode.GETKINDS));
     }
 
     /**
